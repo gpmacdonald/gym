@@ -4,8 +4,8 @@ CLAUDE PROGRESS LOG - Personal Fitness Tracker PWA
 
 CURRENT STATUS: Paused - Awaiting Approval
 LAST UPDATED: December 18, 2025
-CURRENT TASK: Task 2 - ESLint & Prettier Configuration (COMPLETE)
-NEXT TASK: Task 3 - Tailwind CSS Setup
+CURRENT TASK: Task 3 - Tailwind CSS Setup (COMPLETE)
+NEXT TASK: Task 4 - Vitest & React Testing Library Setup
 
 --------------------------------------------------------------------------------
 SESSION LOG
@@ -22,26 +22,37 @@ SESSION LOG
   - Commit: 8ee926f
 
 - Task 2: ESLint & Prettier Configuration
-  - Installed Prettier and ESLint integration (eslint-config-prettier, eslint-plugin-prettier)
-  - Updated eslint.config.js with tseslint.config() for proper TypeScript support
+  - Installed Prettier and ESLint integration
+  - Updated eslint.config.js with tseslint.config()
   - Created .prettierrc with project formatting rules
   - Added npm scripts: format, format:check
-  - Renamed project to "fitness-tracker" in package.json
-  - Formatted all source files with Prettier
   - Commit: e4f4352
 
-### Verification - Task 2
-- [x] npm run lint runs without errors
-- [x] npm run format formats code consistently
-- [x] ESLint catches TypeScript errors appropriately
-- [x] No conflicts between ESLint and Prettier
+- Task 3: Tailwind CSS Setup
+  - Installed Tailwind CSS v4 with @tailwindcss/vite plugin
+  - Configured custom theme in index.css using @theme directive
+  - Added colors from PRD: primary, primary-light
+  - Added semantic colors: success, warning, error, info
+  - Added surface/background/text/border colors for light/dark modes
+  - Set up dark mode support via .dark class
+  - Removed App.css, updated App.tsx with Tailwind demo
+  - Commit: 25d43e3
+
+### Verification - Task 3
+- [x] Tailwind classes apply correctly (tested bg-primary, text-primary)
+- [x] Custom colors work as expected (primary, success, etc.)
+- [x] Dark mode classes work (via .dark class)
+- [x] Build completes without CSS errors
+- [x] npm run lint passes
+- [x] npm run format completes successfully
 
 ### Notes
-- Using ESLint 9 flat config format (modern approach from Vite template)
-- Using tseslint.config() helper for proper TypeScript plugin registration
+- Using Tailwind CSS v4 (installed by default with npm)
+- Tailwind v4 uses CSS-based config with @theme instead of tailwind.config.js
+- Using @tailwindcss/vite plugin for Vite integration
 
 ### For Next Session
-- Task 3: Tailwind CSS Setup
+- Task 4: Vitest & React Testing Library Setup
 
 --------------------------------------------------------------------------------
 KNOWN ISSUES
@@ -54,4 +65,5 @@ ARCHITECTURE DECISIONS
 - Project root: C:\Users\Geoff\gym (not fitness-tracker subdirectory)
 - Scripts: PowerShell (.ps1) instead of bash for Windows compatibility
 - ESLint: Using ESLint 9 flat config (not legacy .eslintrc.cjs)
-- Using HashRouter for PWA compatibility (to be implemented in Task 10)
+- Tailwind: Using v4 with @theme CSS directive (not tailwind.config.js)
+- Dark mode: Class-based (.dark) for manual toggle control
