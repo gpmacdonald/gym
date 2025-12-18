@@ -1,0 +1,41 @@
+================================================================================
+CLAUDE PROGRESS LOG - Personal Fitness Tracker PWA
+================================================================================
+
+CURRENT STATUS: In Progress
+LAST UPDATED: December 18, 2025
+CURRENT TASK: Task 1 - Project Scaffolding
+NEXT TASK: Task 2 - ESLint & Prettier Configuration
+
+--------------------------------------------------------------------------------
+SESSION LOG
+--------------------------------------------------------------------------------
+
+## Session 1 - December 18, 2025
+
+### In Progress
+- Task 1: Project Scaffolding
+  - Initialized Vite + React + TypeScript project
+  - Created folder structure (components, lib, pages, stores, types, test)
+  - Installed dependencies
+  - Creating init.ps1 script
+
+### Notes
+- Using C:\Users\Geoff\gym as project root (not a subdirectory)
+- Using PowerShell scripts instead of bash (Windows environment)
+- Will initialize git repository as part of this task
+
+### For Next Session
+- Continue with Task 2: ESLint & Prettier Configuration
+
+--------------------------------------------------------------------------------
+KNOWN ISSUES
+--------------------------------------------------------------------------------
+- None yet
+
+--------------------------------------------------------------------------------
+ARCHITECTURE DECISIONS
+--------------------------------------------------------------------------------
+- Project root: C:\Users\Geoff\gym (not fitness-tracker subdirectory)
+- Scripts: PowerShell (.ps1) instead of bash for Windows compatibility
+- Using HashRouter for PWA compatibility (to be implemented in Task 10)
