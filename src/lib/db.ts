@@ -43,10 +43,11 @@ export async function initializeSettings(): Promise<Settings> {
 
   const defaultSettings: Settings = {
     id: 'settings',
-    weightUnit: 'lbs',
+    weightUnit: 'kg',
     distanceUnit: 'miles',
     theme: 'system',
     restTimerDefault: 90,
+    barbellWeight: 20, // Standard Olympic barbell weight in kg
   };
 
   await db.settings.add(defaultSettings);

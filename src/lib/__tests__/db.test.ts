@@ -30,6 +30,7 @@ describe('Database', () => {
         id: 'test-1',
         name: 'Bench Press',
         muscleGroup: 'chest',
+        equipmentType: 'barbell',
         isCustom: false,
         createdAt: new Date(),
       };
@@ -48,6 +49,7 @@ describe('Database', () => {
           id: 'ex-1',
           name: 'Bench Press',
           muscleGroup: 'chest',
+          equipmentType: 'barbell',
           isCustom: false,
           createdAt: new Date(),
         },
@@ -55,6 +57,7 @@ describe('Database', () => {
           id: 'ex-2',
           name: 'Squat',
           muscleGroup: 'legs',
+          equipmentType: 'barbell',
           isCustom: false,
           createdAt: new Date(),
         },
@@ -62,6 +65,7 @@ describe('Database', () => {
           id: 'ex-3',
           name: 'Incline Press',
           muscleGroup: 'chest',
+          equipmentType: 'barbell',
           isCustom: false,
           createdAt: new Date(),
         },
@@ -81,6 +85,7 @@ describe('Database', () => {
         id: 'test-update',
         name: 'Original Name',
         muscleGroup: 'chest',
+        equipmentType: 'dumbbell',
         isCustom: true,
         createdAt: new Date(),
       };
@@ -97,6 +102,7 @@ describe('Database', () => {
         id: 'test-delete',
         name: 'To Delete',
         muscleGroup: 'arms',
+        equipmentType: 'cable',
         isCustom: true,
         createdAt: new Date(),
       };
@@ -321,10 +327,11 @@ describe('Database', () => {
       const settings = await initializeSettings();
 
       expect(settings.id).toBe('settings');
-      expect(settings.weightUnit).toBe('lbs');
+      expect(settings.weightUnit).toBe('kg');
       expect(settings.distanceUnit).toBe('miles');
       expect(settings.theme).toBe('system');
       expect(settings.restTimerDefault).toBe(90);
+      expect(settings.barbellWeight).toBe(20);
     });
 
     it('should not overwrite existing settings', async () => {

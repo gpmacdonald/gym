@@ -51,16 +51,19 @@ describe('Query Functions', () => {
       await addExercise({
         name: 'Squat',
         muscleGroup: 'legs',
+        equipmentType: 'barbell',
         isCustom: false,
       });
       await addExercise({
         name: 'Bench Press',
         muscleGroup: 'chest',
+        equipmentType: 'barbell',
         isCustom: false,
       });
       await addExercise({
         name: 'Deadlift',
         muscleGroup: 'back',
+        equipmentType: 'barbell',
         isCustom: false,
       });
 
@@ -75,6 +78,7 @@ describe('Query Functions', () => {
       const id = await addExercise({
         name: 'Pull-ups',
         muscleGroup: 'back',
+        equipmentType: 'bodyweight',
         isCustom: false,
       });
 
@@ -92,16 +96,19 @@ describe('Query Functions', () => {
       await addExercise({
         name: 'Bench Press',
         muscleGroup: 'chest',
+        equipmentType: 'barbell',
         isCustom: false,
       });
       await addExercise({
         name: 'Incline Press',
         muscleGroup: 'chest',
+        equipmentType: 'dumbbell',
         isCustom: false,
       });
       await addExercise({
         name: 'Squat',
         muscleGroup: 'legs',
+        equipmentType: 'barbell',
         isCustom: false,
       });
 
@@ -114,16 +121,19 @@ describe('Query Functions', () => {
       await addExercise({
         name: 'Barbell Bench Press',
         muscleGroup: 'chest',
+        equipmentType: 'barbell',
         isCustom: false,
       });
       await addExercise({
         name: 'Dumbbell Bench Press',
         muscleGroup: 'chest',
+        equipmentType: 'dumbbell',
         isCustom: false,
       });
       await addExercise({
         name: 'Squat',
         muscleGroup: 'legs',
+        equipmentType: 'barbell',
         isCustom: false,
       });
 
@@ -138,6 +148,7 @@ describe('Query Functions', () => {
       const id = await addExercise({
         name: 'Original',
         muscleGroup: 'chest',
+        equipmentType: 'machine',
         isCustom: true,
       });
 
@@ -157,6 +168,7 @@ describe('Query Functions', () => {
       const id = await addExercise({
         name: 'To Delete',
         muscleGroup: 'arms',
+        equipmentType: 'cable',
         isCustom: true,
       });
 

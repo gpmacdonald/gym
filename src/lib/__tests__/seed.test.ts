@@ -83,6 +83,7 @@ describe('Exercise Seeding', () => {
       id: 'custom-1',
       name: 'My Custom Exercise',
       muscleGroup: 'chest',
+      equipmentType: 'dumbbell',
       isCustom: true,
       createdAt: new Date(),
     });
@@ -107,6 +108,7 @@ describe('Exercise Seeding', () => {
       id: 'custom-1',
       name: 'My Custom Exercise',
       muscleGroup: 'arms',
+      equipmentType: 'cable',
       isCustom: true,
       createdAt: new Date(),
     });

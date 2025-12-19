@@ -17,11 +17,20 @@ export type DistanceUnit = 'miles' | 'km';
 // Theme options
 export type Theme = 'light' | 'dark' | 'system';
 
+// Equipment types for exercises
+export type EquipmentType =
+  | 'barbell'
+  | 'dumbbell'
+  | 'machine'
+  | 'cable'
+  | 'bodyweight';
+
 // Exercise interface
 export interface Exercise {
   id: string;
   name: string;
   muscleGroup: MuscleGroup;
+  equipmentType: EquipmentType;
   isCustom: boolean;
   createdAt: Date;
 }
@@ -42,7 +51,7 @@ export interface WorkoutSet {
   exerciseId: string;
   setNumber: number;
   reps: number;
-  weight: number; // Always stored in lbs
+  weight: number; // User-entered weight (per side for barbell, per dumbbell for dumbbell)
   rpe?: number; // Rate of Perceived Exertion (1-10)
   createdAt: Date;
 }
@@ -72,6 +81,7 @@ export interface Settings {
   distanceUnit: DistanceUnit;
   theme: Theme;
   restTimerDefault: number; // seconds
+  barbellWeight: number; // Default barbell weight in kg (typically 20kg/45lbs)
 }
 
 // For displaying workouts with their sets grouped by exercise
