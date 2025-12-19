@@ -3,5 +3,6 @@ export { default as DurationInput } from './DurationInput';
 export { default as TreadmillForm } from './TreadmillForm';
 export { default as BikeForm } from './BikeForm';
 export { default as CardioLogger } from './CardioLogger';
+export { default as CardioCard } from './CardioCard';
 export type { TreadmillData } from './TreadmillForm';
 export type { BikeData } from './BikeForm';
