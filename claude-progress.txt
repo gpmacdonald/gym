@@ -4,8 +4,8 @@ CLAUDE PROGRESS LOG - Personal Fitness Tracker PWA
 
 CURRENT STATUS: Paused - Awaiting Approval
 LAST UPDATED: December 18, 2025
-CURRENT TASK: Task 7 - Database Query Functions (COMPLETE)
-NEXT TASK: Task 8 - Pre-populate Exercise Library
+CURRENT TASK: Task 8 - Pre-populate Exercise Library (COMPLETE)
+NEXT TASK: Task 9 - Zustand Settings Store
 
 --------------------------------------------------------------------------------
 SESSION LOG
@@ -20,36 +20,35 @@ SESSION LOG
 - Task 4: Vitest & React Testing Library Setup - Commit: 8a455d0
 - Task 5: TypeScript Types Definition - Commit: 4840235
 - Task 6: Dexie.js Database Setup - Commit: 8cb0ce5
+- Task 7: Database Query Functions - Commit: 7ae614e
 
-- Task 7: Database Query Functions
-  - Created src/lib/queries.ts with CRUD operations for all entities
-  - Exercise queries: getAllExercises, getExerciseById, getExercisesByMuscleGroup,
-    searchExercises, addExercise, updateExercise, deleteExercise
-  - Workout queries: getAllWorkouts, getWorkoutById, getWorkoutsByDateRange,
-    getWorkoutsByDate, addWorkout, updateWorkout, deleteWorkout
-  - WorkoutSet queries: getSetsByWorkoutId, getSetsByExerciseId, addSet,
-    updateSet, deleteSet
-  - CardioSession queries: getAllCardioSessions, getCardioSessionById,
-    getCardioSessionsByType, getCardioSessionsByDateRange, addCardioSession,
-    updateCardioSession, deleteCardioSession
-  - Delete workout cascades to delete associated sets (transactional)
-  - Error handling for invalid IDs with descriptive messages
-  - Added comprehensive tests (27 tests)
-  - Commit: 7ae614e
+- Task 8: Pre-populate Exercise Library
+  - Created src/lib/seed.ts with seeding functions
+  - Added 46 default exercises from PRD:
+    - Chest: 7 (Bench Press variants, Flyes, Push-ups)
+    - Back: 8 (Deadlift, Rows, Pull-ups, Pulldown)
+    - Legs: 10 (Squat variants, Leg Press, Extensions, Curls)
+    - Shoulders: 7 (OHP, Raises, Arnold Press)
+    - Arms: 8 (Curls, Pushdowns, Dips)
+    - Core: 6 (Planks, Crunches, Leg Raises)
+  - Functions: seedExercises, isSeeded, getDefaultExerciseCount, reseedExercises
+  - Seeding is idempotent (safe to call multiple times)
+  - Added comprehensive tests (11 tests)
+  - Commit: 0dc44d3
 
-### Verification - Task 7
-- [x] All query functions work correctly
-- [x] Error handling for invalid IDs (throws with descriptive message)
-- [x] Queries return correct data types
-- [x] All 62 tests pass (27 query tests + 35 existing)
+### Verification - Task 8
+- [x] All 46 exercises are seeded correctly
+- [x] Each exercise has correct muscle group
+- [x] No duplicates created on re-run
+- [x] isCustom is false for all seeded exercises
+- [x] All 73 tests pass (11 seed tests + 62 existing)
 
 ### Notes
-- Using crypto.randomUUID() for ID generation
-- Delete workout uses Dexie transaction to ensure atomicity
-- Search exercises is case-insensitive partial match
+- Using filter() instead of where().equals() for boolean queries in Dexie
+- Exercises grouped by muscle group as specified in PRD
 
 ### For Next Session
-- Task 8: Pre-populate Exercise Library (seed 46 exercises)
+- Task 9: Zustand Settings Store
 
 --------------------------------------------------------------------------------
 KNOWN ISSUES
@@ -69,3 +68,4 @@ ARCHITECTURE DECISIONS
 - Data storage: Weight in lbs, distance in miles (convert on display)
 - Database: Dexie.js v4 with IndexedDB
 - ID generation: crypto.randomUUID()
+- Boolean queries: Use filter() instead of where().equals() for booleans
