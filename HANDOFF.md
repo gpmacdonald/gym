@@ -5,141 +5,143 @@
 ```powershell
 cd C:\Users\Geoff\gym
 npm install      # Dependencies already installed
-npm test         # Verify 106 tests pass
+npm test         # Verify all tests pass
 npm run dev      # Start dev server (port 5173)
 ```
 
 ## Project Overview
 
-Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. Uses React 19, TypeScript, Vite, Tailwind CSS v4, Dexie.js (IndexedDB), and Zustand for state management.
-
-## Current Status
-
-**Tasks 1-13 COMPLETE** | **Next: Task 14 - Workout Logger Page**
+Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. Uses React 19, TypeScript, Vite, Tailwind CSS v4, Dexie.js (IndexedDB), Zustand for state management, and Recharts for data visualization.
 
 ### Key Documents to Review
 1. `prd-improved.md` - Product requirements
-2. `agentic-guidelines.md` - Development guidelines
-3. `TASK-CHECKLIST-FULL.md` - Full task breakdown (Task 14 starts at line ~1108)
-4. `claude-progress.txt` - Detailed session logs
+2. `agentic-guidelines.md` - Development guidelines  
+3. `TASK-CHECKLIST-FULL.md` - Full task breakdown (Task 29 starts at line ~2596)
+
+## Current Status
+
+**Tasks 1-28 COMPLETE** | **Next: Task 29 - Volume Chart**
+
+### Recently Completed (This Session)
+| Task | Description | Commit |
+|------|-------------|--------|
+| 19 | Stationary Bike Form Component | e8543e2 |
+| 20 | Cardio Logger Integration | 96977c4 |
+| 21 | Cardio Session Card Component | 6cc93d1 |
+| 22 | Combined Workout History (ActivityList) | 53c11b9 |
+| 23 | Data Export to JSON | 8de5a79 |
+| 24 | Data Import with Validation | a59fcd4 |
+| 25 | Mock Data Seeding | 92003aa |
+| 26 | Progress Page Layout | 2f2e9c1 |
+| 27 | Recharts Setup & Base Chart | f7b8cf3 |
+| 28 | Weight Progress Chart | 0108893 |
 
 ## Project Structure
 
 ```
 C:\Users\Geoff\gym/
 ├── src/
+│   ├── components/
+│   │   ├── cardio/           # CardioTypeSelector, TreadmillForm, BikeForm, CardioLogger, CardioCard
+│   │   ├── layout/           # Header, BottomNav
+│   │   ├── progress/         # TimeRangeTabs, ExerciseDropdown, CardioTypeDropdown, BaseChart, WeightProgressChart
+│   │   ├── settings/         # DataExport, DataImport
+│   │   └── workout/          # ExerciseSelector, SetInput, WorkoutLogger, WorkoutCard, ActivityList
 │   ├── lib/
-│   │   ├── db.ts           # Dexie database setup
-│   │   ├── queries.ts      # CRUD operations for all entities
-│   │   ├── seed.ts         # 46 default exercises seeding
-│   │   ├── weight.ts       # Weight calculation utilities
-│   │   └── __tests__/      # Tests for lib modules
+│   │   ├── db.ts             # Dexie database setup
+│   │   ├── queries.ts        # CRUD operations for all entities
+│   │   ├── seed.ts           # 46 default exercises + mock data seeding
+│   │   ├── weight.ts         # Weight calculation utilities
+│   │   ├── utils.ts          # formatDuration, formatDate utilities
+│   │   ├── chartUtils.ts     # Chart formatting and colors
+│   │   ├── progressQueries.ts # Weight progress data queries
+│   │   ├── dataExport.ts     # JSON export functionality
+│   │   ├── dataImport.ts     # JSON import with validation
+│   │   └── __tests__/        # Tests for lib modules
+│   ├── pages/
+│   │   ├── Home.tsx          # Main page with ActivityList
+│   │   ├── Progress.tsx      # Progress charts page
+│   │   ├── Exercises.tsx     # Exercise library
+│   │   └── Settings.tsx      # Settings page
 │   ├── stores/
-│   │   ├── settingsStore.ts # Zustand settings (COMPLETE)
-│   │   ├── index.ts        # Barrel export
-│   │   └── __tests__/      # Store tests
-│   ├── types/
-│   │   └── index.ts        # All TypeScript interfaces
-│   ├── test/
-│   │   └── setup.ts        # Vitest + fake-indexeddb setup
-│   ├── App.tsx             # Basic app shell
-│   └── index.css           # Tailwind v4 with @theme
-├── eslint.config.js        # ESLint 9 flat config
-├── vitest.config.ts        # Test configuration
-├── tailwind.config.js      # Minimal (v4 uses CSS @theme)
-└── init.ps1                # PowerShell dev setup script
+│   │   └── settingsStore.ts  # Zustand settings store
+│   └── types/
+│       └── index.ts          # All TypeScript interfaces
 ```
+
+## Key Features Implemented
+
+### Workout Logging
+- Weight workouts with exercise selection, set tracking
+- Cardio sessions (treadmill & stationary bike)
+- Combined activity history with filter tabs (All/Weights/Cardio)
+
+### Progress Visualization
+- Exercise dropdown with recent exercises first
+- Time range selector (1M, 3M, 6M, 1Y, All)
+- Weight progress line chart with PR highlighting
+- Dark mode support for charts
+
+### Data Management
+- Export all data to JSON backup file
+- Import with validation (merge or replace mode)
+- Mock data seeding for testing (~60 workouts, ~30 cardio over 3 months)
 
 ## Important Technical Details
 
-### Weight System (User Customization)
-The user requested a specific weight entry system:
-- **Barbell exercises**: User enters weight per side. Total = (weight × 2) + barbell weight
-- **Dumbbell exercises**: User enters weight per dumbbell. Total = weight × 2
-- **Machine/Cable/Bodyweight**: Weight is as entered
-- **Default unit**: kg (not lbs)
-- **Default barbell**: 20kg (Olympic standard)
+### Weight System
+- Barbell: User enters per-side weight, total = (weight × 2) + barbell
+- Dumbbell: User enters per-dumbbell, total = weight × 2
+- Default unit: kg, default barbell: 20kg
 
-Use `src/lib/weight.ts` utilities:
+### Charts (Recharts)
 ```typescript
-import { calculateTotalWeight, calculateEnteredWeight, formatWeight } from './lib/weight';
-
-// Barbell: 35kg per side + 20kg bar = 90kg total
-calculateTotalWeight(35, 'barbell', 20) // Returns 90
-
-// Dumbbell: 20kg per dumbbell × 2 = 40kg total
-calculateTotalWeight(20, 'dumbbell') // Returns 40
+import { BaseChart, WeightProgressChart } from '../components/progress';
+import { getWeightProgressData } from '../lib/progressQueries';
 ```
 
-### Database (Dexie.js v4)
-- Boolean queries: Use `filter()` not `where().equals()` for booleans
-- Exercises have `equipmentType` field linking to weight calculation
-- Settings include `barbellWeight` for customizable bar weight
-
-### State Management (Zustand)
-Settings store is complete at `src/stores/settingsStore.ts`:
+### Mock Data Seeding
 ```typescript
-import { useSettingsStore } from './stores';
+import { seedMockData, clearMockData, hasMockData } from '../lib/seed';
 
-const { weightUnit, barbellWeight, setWeightUnit } = useSettingsStore();
+await seedMockData();  // Creates 3 months of realistic data
+await clearMockData(); // Clears workout data, keeps exercises
 ```
 
-### Testing
-- Framework: Vitest + React Testing Library + jsdom
-- IndexedDB mock: fake-indexeddb (configured in setup.ts)
-- Run: `npm test` (106 tests currently)
-- Coverage: `npm run test:coverage`
+### Data Export/Import
+```typescript
+import { exportAllData, downloadAsJson } from '../lib/dataExport';
+import { validateImportFile, importData } from '../lib/dataImport';
+```
 
-### Styling
-- Tailwind CSS v4 with CSS-based `@theme` directive (not JS config)
-- Dark mode: class-based (`.dark` on html element)
-- Theme colors defined in `src/index.css`
+## Next Task: Task 29 - Volume Chart
 
-## Completed Tasks Summary
-
-| Task | Description | Commit |
-|------|-------------|--------|
-| 1 | Project Scaffolding (Vite + React + TS) | 8ee926f |
-| 2 | ESLint 9 & Prettier | e4f4352 |
-| 3 | Tailwind CSS v4 | 25d43e3 |
-| 4 | Vitest + RTL Setup | 8a455d0 |
-| 5 | TypeScript Types | 4840235 |
-| 6 | Dexie.js Database | 8cb0ce5 |
-| 7 | Database Query Functions | 7ae614e |
-| 8 | Exercise Library Seeding | 0dc44d3 |
-| - | Equipment Types + Weight Utils | ce387b3 |
-| 9 | Zustand Settings Store | 9f71cc8 |
-| 10 | React Router Setup | c8fcd1f |
-| 11 | App Shell & Layout Components | 5b31715 |
-| 12 | Exercise Selector Component | ffd97da |
-| 13 | Set Input Component | 2383603 |
-
-## Next Task: Task 14 - Workout Logger Page
-
-Reference `TASK-CHECKLIST-FULL.md` around line 1108. This task involves:
-1. Create WorkoutTypeSelector component (weights vs cardio toggle)
-2. Build main workout logging page integrating ExerciseSelector and SetInput
-3. Create workout and save sets to IndexedDB
-4. Display logged exercises and sets in current workout
-
-## Known Gotchas
-
-1. **ESLint 9**: Uses flat config with `tseslint.config()` helper - don't use legacy `.eslintrc`
-2. **Tailwind v4**: No `npx tailwindcss init` - use CSS `@theme` directive
-3. **Dexie booleans**: `where('isCustom').equals(false)` fails - use `filter()`
-4. **Windows paths**: Use PowerShell, not bash scripts
+Reference `TASK-CHECKLIST-FULL.md` around line 2596. This task involves:
+1. Add `getVolumeProgressData()` to progressQueries.ts
+2. Create VolumeChart component (bar or line chart)
+3. Calculate volume as sum(sets × reps × weight)
+4. Support per-exercise or total workout volume
+5. Integrate into Progress page with toggle/tab
 
 ## Verification Before Starting
 
 ```powershell
-npm test                    # Should see 106 passing tests
-npm run lint               # Should pass with no errors
+npm test                    # All tests should pass
+npm run lint               # Should pass (warnings ok)
 npm run build              # Should build successfully
 ```
+
+## Known Gotchas
+
+1. **ESLint 9**: Uses flat config - don't use legacy `.eslintrc`
+2. **Tailwind v4**: Uses CSS `@theme` directive, not JS config
+3. **Dexie booleans**: Use `filter()` not `where().equals()` for booleans
+4. **Recharts in tests**: ResponsiveContainer needs width/height - check for `.recharts-responsive-container` class
+5. **Windows paths**: Use PowerShell, backslashes in paths
 
 ## User Preferences
 
 - Check in before proceeding to each new task
-- Use PowerShell for scripts (Windows environment)
+- Update HANDOFF.md when stopping
+- Use PowerShell (Windows environment)
 - Default weight unit is kg, not lbs
-- Weight entry is per-side (barbell) or per-dumbbell (dumbbell)
