@@ -56,11 +56,13 @@ describe('TypeScript Types', () => {
       id: 'test-id',
       name: 'Bench Press',
       muscleGroup: 'chest',
+      equipmentType: 'barbell',
       isCustom: false,
       createdAt: new Date(),
     };
     expect(exercise.name).toBe('Bench Press');
     expect(exercise.muscleGroup).toBe('chest');
+    expect(exercise.equipmentType).toBe('barbell');
   });
 
   it('should create a valid Workout object', () => {
@@ -133,9 +135,11 @@ describe('TypeScript Types', () => {
       distanceUnit: 'miles',
       theme: 'system',
       restTimerDefault: 90,
+      barbellWeight: 20,
     };
     expect(settings.id).toBe('settings');
     expect(settings.weightUnit).toBe('lbs');
+    expect(settings.barbellWeight).toBe(20);
   });
 
   it('should create a valid WorkoutWithSets object', () => {
@@ -160,6 +164,7 @@ describe('TypeScript Types', () => {
           id: 'ex-1',
           name: 'Bench Press',
           muscleGroup: 'chest',
+          equipmentType: 'barbell',
           isCustom: false,
           createdAt: new Date(),
         },
@@ -188,9 +193,11 @@ describe('TypeScript Types', () => {
     const exerciseInput: CreateExerciseInput = {
       name: 'Custom Exercise',
       muscleGroup: 'arms',
+      equipmentType: 'dumbbell',
       isCustom: true,
     };
     expect(exerciseInput.name).toBe('Custom Exercise');
+    expect(exerciseInput.equipmentType).toBe('dumbbell');
 
     const workoutInput: CreateWorkoutInput = {
       date: new Date(),
