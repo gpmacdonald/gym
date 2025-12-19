@@ -7,6 +7,7 @@ import {
   CardioTypeDropdown,
   WeightProgressChart,
   VolumeChart,
+  PRList,
   getStartDateForRange,
   type TimeRange,
   type CardioFilter,
@@ -124,41 +125,53 @@ export default function Progress() {
           )}
         </div>
 
-        {/* Stats Cards Placeholder */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* Personal Records Section (Weights view only) */}
+        {view === 'weights' && (
           <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              {view === 'weights' ? 'Personal Record' : 'Total Distance'}
-            </p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-              --
-            </p>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+              Personal Records
+            </h3>
+            <PRList limit={5} />
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              {view === 'weights' ? 'Total Volume' : 'Total Time'}
-            </p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-              --
-            </p>
+        )}
+
+        {/* Cardio Stats Placeholder */}
+        {view === 'cardio' && (
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Total Distance
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                --
+              </p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Total Time
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                --
+              </p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Sessions
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                --
+              </p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Avg Duration
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                --
+              </p>
+            </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              {view === 'weights' ? 'Workouts' : 'Sessions'}
-            </p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-              --
-            </p>
-          </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              {view === 'weights' ? 'Avg Weight' : 'Avg Duration'}
-            </p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-              --
-            </p>
-          </div>
-        </div>
+        )}
       </div>
     </>
   );

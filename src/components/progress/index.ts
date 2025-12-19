@@ -11,3 +11,7 @@ export { default as BaseChart, ChartTooltip, useChartDarkMode } from './BaseChar
 export { default as WeightProgressChart } from './WeightProgressChart';
 
 export { default as VolumeChart } from './VolumeChart';
+
+export { default as PRBadge } from './PRBadge';
+
+export { default as PRList } from './PRList';
