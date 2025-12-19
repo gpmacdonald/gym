@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { Plus, Dumbbell } from 'lucide-react';
 import { Header } from '../components/layout';
-import { WorkoutTypeSelector, WorkoutLogger } from '../components/workout';
+import {
+  WorkoutTypeSelector,
+  WorkoutLogger,
+  WorkoutList,
+} from '../components/workout';
 
 type WorkoutType = 'weights' | 'cardio';
 
@@ -9,6 +13,7 @@ export default function Home() {
   const [isWorkoutActive, setIsWorkoutActive] = useState(false);
   const [workoutType, setWorkoutType] = useState<WorkoutType>('weights');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const handleStartWorkout = () => {
     setIsWorkoutActive(true);
@@ -18,6 +23,7 @@ export default function Home() {
   const handleCompleteWorkout = () => {
     setIsWorkoutActive(false);
     setShowSuccess(true);
+    setRefreshKey((prev) => prev + 1); // Refresh workout list
     // Hide success message after 3 seconds
     setTimeout(() => setShowSuccess(false), 3000);
   };
@@ -58,19 +64,26 @@ export default function Home() {
             </div>
           )
         ) : (
-          <div className="flex flex-col items-center justify-center py-12">
-            <button
-              type="button"
-              onClick={handleStartWorkout}
-              className="flex items-center gap-3 px-6 py-4 bg-primary text-white rounded-xl font-semibold text-lg shadow-lg hover:opacity-90 transition-opacity"
-            >
-              <Plus className="w-6 h-6" />
-              Start {workoutType === 'weights' ? 'Weight' : 'Cardio'} Workout
-            </button>
-            <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-              Tap to begin logging your workout
-            </p>
-          </div>
+          <>
+            <div className="flex flex-col items-center justify-center py-8">
+              <button
+                type="button"
+                onClick={handleStartWorkout}
+                className="flex items-center gap-3 px-6 py-4 bg-primary text-white rounded-xl font-semibold text-lg shadow-lg hover:opacity-90 transition-opacity"
+              >
+                <Plus className="w-6 h-6" />
+                Start {workoutType === 'weights' ? 'Weight' : 'Cardio'} Workout
+              </button>
+              <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                Tap to begin logging your workout
+              </p>
+            </div>
+
+            {/* Workout History */}
+            <div className="mt-4">
+              <WorkoutList key={refreshKey} />
+            </div>
+          </>
         )}
       </div>
     </>
