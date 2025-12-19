@@ -4,8 +4,8 @@ CLAUDE PROGRESS LOG - Personal Fitness Tracker PWA
 
 CURRENT STATUS: Paused - Awaiting Approval
 LAST UPDATED: December 18, 2025
-CURRENT TASK: Task 4 - Vitest & React Testing Library Setup (COMPLETE)
-NEXT TASK: Task 5 - TypeScript Types Definition
+CURRENT TASK: Task 5 - TypeScript Types Definition (COMPLETE)
+NEXT TASK: Task 6 - Dexie.js Database Setup
 
 --------------------------------------------------------------------------------
 SESSION LOG
@@ -41,24 +41,31 @@ SESSION LOG
   - Created vitest.config.ts with jsdom environment and v8 coverage
   - Created src/test/setup.ts with jest-dom imports
   - Added test scripts: test, test:watch, test:coverage
-  - Created sample tests (setup.test.ts and App.test.tsx)
-  - Updated tsconfig.app.json with jest-dom types
   - Commit: 8a455d0
 
-### Verification - Task 4
-- [x] npm test runs without errors (5 tests passing)
-- [x] Sample test passes
-- [x] Coverage report generates with npm run test:coverage (100% coverage)
-- [x] React Testing Library can render components
-- [x] userEvent interactions work correctly
+- Task 5: TypeScript Types Definition
+  - Created src/types/index.ts with all interfaces from PRD
+  - Types: MuscleGroup, CardioType, WeightUnit, DistanceUnit, Theme
+  - Interfaces: Exercise, Workout, WorkoutSet, CardioSession, Settings
+  - Extended types: WorkoutWithSets, Activity
+  - Input types: CreateExerciseInput, UpdateExerciseInput, etc.
+  - Added comprehensive tests (14 tests for types)
+  - Commit: 4840235
+
+### Verification - Task 5
+- [x] All interfaces match PRD data model
+- [x] TypeScript compiles without errors (npx tsc --noEmit)
+- [x] Types can be imported and used correctly
+- [x] All 19 tests pass (14 type tests + 5 existing)
 
 ### Notes
-- Using Vitest v4 (latest)
-- Coverage provider: v8 (faster than istanbul)
-- All 5 tests pass: 2 setup tests + 3 App component tests
+- Types are exported from src/types/index.ts
+- Weight always stored in lbs, converted on display
+- Distance always stored in miles, converted on display
+- Input types use Omit to exclude auto-generated fields
 
 ### For Next Session
-- Task 5: TypeScript Types Definition
+- Task 6: Dexie.js Database Setup
 
 --------------------------------------------------------------------------------
 KNOWN ISSUES
@@ -75,3 +82,4 @@ ARCHITECTURE DECISIONS
 - Dark mode: Class-based (.dark) for manual toggle control
 - Testing: Vitest + React Testing Library + jsdom environment
 - Coverage: v8 provider with text and html reporters
+- Data storage: Weight in lbs, distance in miles (convert on display)
