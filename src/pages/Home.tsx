@@ -4,7 +4,7 @@ import { Header } from '../components/layout';
 import {
   WorkoutTypeSelector,
   WorkoutLogger,
-  WorkoutList,
+  ActivityList,
 } from '../components/workout';
 import { CardioLogger } from '../components/cardio';
 
@@ -90,9 +90,9 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Workout History */}
+            {/* Activity History */}
             <div className="mt-4">
-              <WorkoutList key={refreshKey} />
+              <ActivityList key={refreshKey} />
             </div>
           </>
         )}
