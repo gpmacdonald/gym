@@ -20,17 +20,16 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-30 COMPLETE** | **Next: Task 31 - Cardio Distance Chart**
+**Tasks 1-31 COMPLETE** | **Next: Task 32 - Cardio Duration & Pace Charts**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
 |------|-------------|--------|
-| 25 | Mock Data Seeding | 92003aa |
-| 26 | Progress Page Layout | 2f2e9c1 |
 | 27 | Recharts Setup & Base Chart | f7b8cf3 |
 | 28 | Weight Progress Chart | 0108893 |
 | 29 | Volume Chart | 4e5f007 |
 | 30 | PR Detection & Display | 3bf7b77 |
+| 31 | Cardio Distance Chart | 6f89faa |
 
 ## Project Structure
 
@@ -110,15 +109,15 @@ import { exportAllData, downloadAsJson } from '../lib/dataExport';
 import { validateImportFile, importData } from '../lib/dataImport';
 ```
 
-## Next Task: Task 31 - Cardio Distance Chart
+## Next Task: Task 32 - Cardio Duration & Pace Charts
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2662. This task involves:
-1. Add `getCardioDistanceData(type?, startDate, endDate)` to progressQueries.ts
-2. Create CardioDistanceChart component:
-   - Line chart with date on X-axis, distance on Y-axis
-   - Filter by cardio type (treadmill, bike, all)
-   - Handle sessions without distance data
-   - Display correct unit (miles/km)
+Reference `TASK-CHECKLIST-FULL.md` around line 2687. This task involves:
+1. Add query functions to progressQueries.ts:
+   - `getCardioDurationData(type?, startDate, endDate)`
+   - `getCardioPaceData(type?, startDate, endDate)` - pace = distance/duration
+2. Create CardioDurationChart component
+3. Create CardioPaceChart component with speed/pace toggle
+4. Add chart selector in cardio view (Distance | Duration | Pace)
 
 ## Verification Before Starting
 
