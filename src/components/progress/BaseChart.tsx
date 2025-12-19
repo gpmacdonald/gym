@@ -3,7 +3,7 @@ import { ResponsiveContainer } from 'recharts';
 import { CHART_COLORS, formatTooltipDate } from '../../lib/chartUtils';
 
 interface BaseChartProps {
-  children: ReactNode;
+  children?: ReactNode;
   height?: number;
   isEmpty?: boolean;
   emptyMessage?: string;

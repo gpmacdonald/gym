@@ -5,6 +5,8 @@ import {
   TimeRangeTabs,
   ExerciseDropdown,
   CardioTypeDropdown,
+  WeightProgressChart,
+  getStartDateForRange,
   type TimeRange,
   type CardioFilter,
 } from '../components/progress';
@@ -16,6 +18,9 @@ export default function Progress() {
   const [timeRange, setTimeRange] = useState<TimeRange>('3M');
   const [selectedExercise, setSelectedExercise] = useState<string | null>(null);
   const [cardioFilter, setCardioFilter] = useState<CardioFilter>('all');
+
+  const startDate = getStartDateForRange(timeRange);
+  const endDate = new Date();
 
   return (
     <>
@@ -62,19 +67,21 @@ export default function Progress() {
         {/* Time Range Tabs */}
         <TimeRangeTabs value={timeRange} onChange={setTimeRange} />
 
-        {/* Chart Placeholder */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 min-h-[300px] flex items-center justify-center border border-gray-200 dark:border-gray-700">
-          <div className="text-center text-gray-500 dark:text-gray-400">
-            {view === 'weights' ? (
-              selectedExercise ? (
-                <p>Weight progress chart will appear here</p>
-              ) : (
-                <p>Select an exercise to view progress</p>
-              )
-            ) : (
-              <p>Cardio progress chart will appear here</p>
-            )}
-          </div>
+        {/* Chart */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          {view === 'weights' ? (
+            <WeightProgressChart
+              exerciseId={selectedExercise}
+              startDate={startDate}
+              endDate={endDate}
+            />
+          ) : (
+            <div className="min-h-[300px] flex items-center justify-center">
+              <p className="text-gray-500 dark:text-gray-400">
+                Cardio progress chart coming soon
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Stats Cards Placeholder */}

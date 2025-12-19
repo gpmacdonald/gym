@@ -7,3 +7,5 @@ export { default as CardioTypeDropdown } from './CardioTypeDropdown';
 export type { CardioFilter } from './CardioTypeDropdown';
 
 export { default as BaseChart, ChartTooltip, useChartDarkMode } from './BaseChart';
+
+export { default as WeightProgressChart } from './WeightProgressChart';
