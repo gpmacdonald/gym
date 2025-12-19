@@ -4,8 +4,8 @@ CLAUDE PROGRESS LOG - Personal Fitness Tracker PWA
 
 CURRENT STATUS: Paused - Awaiting Approval
 LAST UPDATED: December 18, 2025
-CURRENT TASK: Task 5 - TypeScript Types Definition (COMPLETE)
-NEXT TASK: Task 6 - Dexie.js Database Setup
+CURRENT TASK: Task 6 - Dexie.js Database Setup (COMPLETE)
+NEXT TASK: Task 7 - Database Query Functions
 
 --------------------------------------------------------------------------------
 SESSION LOG
@@ -15,57 +15,51 @@ SESSION LOG
 
 ### Completed
 - Task 1: Project Scaffolding
-  - Initialized Vite + React + TypeScript project in C:\Users\Geoff\gym
-  - Created folder structure
-  - Created init.ps1 PowerShell script
-  - Initialized git repository
+  - Initialized Vite + React + TypeScript project
   - Commit: 8ee926f
 
 - Task 2: ESLint & Prettier Configuration
-  - Installed Prettier and ESLint integration
-  - Updated eslint.config.js with tseslint.config()
-  - Created .prettierrc with project formatting rules
-  - Added npm scripts: format, format:check
   - Commit: e4f4352
 
 - Task 3: Tailwind CSS Setup
-  - Installed Tailwind CSS v4 with @tailwindcss/vite plugin
-  - Configured custom theme in index.css using @theme directive
-  - Added colors from PRD (primary, semantic, surface/background)
-  - Set up dark mode support via .dark class
   - Commit: 25d43e3
 
 - Task 4: Vitest & React Testing Library Setup
-  - Installed vitest, jsdom, @testing-library/react, @testing-library/jest-dom
-  - Installed @testing-library/user-event and @vitest/coverage-v8
-  - Created vitest.config.ts with jsdom environment and v8 coverage
-  - Created src/test/setup.ts with jest-dom imports
-  - Added test scripts: test, test:watch, test:coverage
   - Commit: 8a455d0
 
 - Task 5: TypeScript Types Definition
-  - Created src/types/index.ts with all interfaces from PRD
-  - Types: MuscleGroup, CardioType, WeightUnit, DistanceUnit, Theme
-  - Interfaces: Exercise, Workout, WorkoutSet, CardioSession, Settings
-  - Extended types: WorkoutWithSets, Activity
-  - Input types: CreateExerciseInput, UpdateExerciseInput, etc.
-  - Added comprehensive tests (14 tests for types)
+  - Created all interfaces matching PRD data model
   - Commit: 4840235
 
-### Verification - Task 5
-- [x] All interfaces match PRD data model
-- [x] TypeScript compiles without errors (npx tsc --noEmit)
-- [x] Types can be imported and used correctly
-- [x] All 19 tests pass (14 type tests + 5 existing)
+- Task 6: Dexie.js Database Setup
+  - Installed dexie and fake-indexeddb (for testing)
+  - Created src/lib/db.ts with FitnessDatabase class
+  - Defined schema with indexes for all tables:
+    - exercises: id, name, muscleGroup, isCustom
+    - workouts: id, date
+    - workoutSets: id, workoutId, exerciseId, [workoutId+setNumber]
+    - cardioSessions: id, date, type
+    - settings: id
+  - Added initializeSettings() helper for default settings
+  - Added comprehensive tests (16 tests)
+  - Updated test setup with fake-indexeddb/auto
+  - Commit: 8cb0ce5
+
+### Verification - Task 6
+- [x] Database initializes without errors
+- [x] All tables are created
+- [x] Can perform basic CRUD operations
+- [x] All 35 tests pass (16 db tests + 19 existing)
+- [x] Indexes work correctly for queries
 
 ### Notes
-- Types are exported from src/types/index.ts
-- Weight always stored in lbs, converted on display
-- Distance always stored in miles, converted on display
-- Input types use Omit to exclude auto-generated fields
+- Using Dexie v4 (latest)
+- Using fake-indexeddb for testing IndexedDB operations
+- Database name: 'FitnessTracker'
+- Compound index on workoutSets: [workoutId+setNumber]
 
 ### For Next Session
-- Task 6: Dexie.js Database Setup
+- Task 7: Database Query Functions
 
 --------------------------------------------------------------------------------
 KNOWN ISSUES
@@ -75,11 +69,12 @@ KNOWN ISSUES
 --------------------------------------------------------------------------------
 ARCHITECTURE DECISIONS
 --------------------------------------------------------------------------------
-- Project root: C:\Users\Geoff\gym (not fitness-tracker subdirectory)
-- Scripts: PowerShell (.ps1) instead of bash for Windows compatibility
-- ESLint: Using ESLint 9 flat config (not legacy .eslintrc.cjs)
-- Tailwind: Using v4 with @theme CSS directive (not tailwind.config.js)
-- Dark mode: Class-based (.dark) for manual toggle control
-- Testing: Vitest + React Testing Library + jsdom environment
-- Coverage: v8 provider with text and html reporters
+- Project root: C:\Users\Geoff\gym
+- Scripts: PowerShell (.ps1) for Windows
+- ESLint: ESLint 9 flat config
+- Tailwind: v4 with @theme CSS directive
+- Dark mode: Class-based (.dark)
+- Testing: Vitest + React Testing Library + jsdom + fake-indexeddb
+- Coverage: v8 provider
 - Data storage: Weight in lbs, distance in miles (convert on display)
+- Database: Dexie.js v4 with IndexedDB
