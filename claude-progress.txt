@@ -4,8 +4,8 @@ CLAUDE PROGRESS LOG - Personal Fitness Tracker PWA
 
 CURRENT STATUS: Paused - Awaiting Approval
 LAST UPDATED: December 19, 2025
-CURRENT TASK: Task 11 - App Shell & Layout Components (COMPLETE)
-NEXT TASK: Task 12 - Exercise Selector Component
+CURRENT TASK: Task 12 - Exercise Selector Component (COMPLETE)
+NEXT TASK: Task 13 - Set Input Component
 
 --------------------------------------------------------------------------------
 SESSION LOG
@@ -110,8 +110,20 @@ SESSION LOG
   - All 123 tests passing
   - Commit: 5b31715
 
-### For Next Session
 - Task 12: Exercise Selector Component
+  - Created src/components/workout/ExerciseSelector.tsx
+  - Features:
+    - Search input with clear button
+    - Muscle group filter chips
+    - Exercise list with selection callback
+    - Recently used exercises appear first
+    - Loading and empty states
+  - Added 10 component tests
+  - All 133 tests passing
+  - Commit: ffd97da
+
+### For Next Session
+- Task 13: Set Input Component
 
 --------------------------------------------------------------------------------
 KNOWN ISSUES
