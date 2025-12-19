@@ -2,10 +2,10 @@
 CLAUDE PROGRESS LOG - Personal Fitness Tracker PWA
 ================================================================================
 
-CURRENT STATUS: Paused - Awaiting Approval
-LAST UPDATED: December 18, 2025
-CURRENT TASK: Task 8 - Pre-populate Exercise Library (COMPLETE)
-NEXT TASK: Task 9 - Zustand Settings Store
+CURRENT STATUS: In Progress
+LAST UPDATED: December 19, 2025
+CURRENT TASK: Task 9 - Zustand Settings Store
+NEXT TASK: Task 10 - Zustand Exercise Store
 
 --------------------------------------------------------------------------------
 SESSION LOG
@@ -47,7 +47,25 @@ SESSION LOG
 - Using filter() instead of where().equals() for boolean queries in Dexie
 - Exercises grouped by muscle group as specified in PRD
 
-### For Next Session
+## Session 2 - December 19, 2025
+
+### Completed
+- Equipment Types Enhancement (User Request)
+  - Added EquipmentType to Exercise interface ('barbell', 'dumbbell', 'machine', 'cable', 'bodyweight')
+  - Tagged all 46 exercises with appropriate equipment types
+  - Changed default weight unit from 'lbs' to 'kg'
+  - Added barbellWeight setting (default 20kg Olympic barbell)
+  - Created src/lib/weight.ts with calculation utilities:
+    - calculateTotalWeight: barbell=(weight×2)+bar, dumbbell=weight×2, machine/cable/bodyweight=as-is
+    - calculateEnteredWeight: reverse calculation for display
+    - convertWeight: kg/lbs conversion
+    - formatWeight: formatted display string
+    - getWeightEntryDescription: UI helper text
+  - Added 20 weight calculation tests
+  - All 93 tests passing
+  - Commit: ce387b3
+
+### In Progress
 - Task 9: Zustand Settings Store
 
 --------------------------------------------------------------------------------
@@ -65,7 +83,9 @@ ARCHITECTURE DECISIONS
 - Dark mode: Class-based (.dark)
 - Testing: Vitest + React Testing Library + jsdom + fake-indexeddb
 - Coverage: v8 provider
-- Data storage: Weight in lbs, distance in miles (convert on display)
+- Data storage: Weight in kg (default), distance in miles (convert on display)
+- Weight entry: Per-side for barbell, per-dumbbell for dumbbell, as-is for machine/cable
+- Default barbell weight: 20kg (configurable in settings)
 - Database: Dexie.js v4 with IndexedDB
 - ID generation: crypto.randomUUID()
 - Boolean queries: Use filter() instead of where().equals() for booleans
