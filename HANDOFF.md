@@ -15,12 +15,12 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-9 COMPLETE** | **Next: Task 10 - Zustand Exercise Store**
+**Tasks 1-10 COMPLETE** | **Next: Task 11 - App Shell & Layout Components**
 
 ### Key Documents to Review
 1. `prd-improved.md` - Product requirements
 2. `agentic-guidelines.md` - Development guidelines
-3. `TASK-CHECKLIST-FULL.md` - Full task breakdown (Task 10 starts at line ~695)
+3. `TASK-CHECKLIST-FULL.md` - Full task breakdown (Task 11 starts at line ~801)
 4. `claude-progress.txt` - Detailed session logs
 
 ## Project Structure
@@ -109,18 +109,16 @@ const { weightUnit, barbellWeight, setWeightUnit } = useSettingsStore();
 | 8 | Exercise Library Seeding | 0dc44d3 |
 | - | Equipment Types + Weight Utils | ce387b3 |
 | 9 | Zustand Settings Store | 9f71cc8 |
+| 10 | React Router Setup | c8fcd1f |
 
-## Next Task: Task 10 - Zustand Exercise Store
+## Next Task: Task 11 - App Shell & Layout Components
 
-Reference `TASK-CHECKLIST-FULL.md` around line 695. The exercise store should:
-1. Create `src/stores/exerciseStore.ts`
-2. Load exercises from Dexie on init
-3. Provide actions: add, update, delete exercises
-4. Filter by muscle group
-5. Search by name
-6. Sync changes back to IndexedDB
-
-Note: Exercises now have `equipmentType` field - ensure store handles this.
+Reference `TASK-CHECKLIST-FULL.md` around line 801. This task involves:
+1. Install lucide-react for icons
+2. Create `src/components/layout/BottomNav.tsx` - Bottom navigation bar
+3. Create `src/components/layout/Header.tsx` - Page headers
+4. Create `src/components/layout/AppShell.tsx` - Main app container
+5. Add safe-area padding for iPhone notch/home indicator
 
 ## Known Gotchas
 
