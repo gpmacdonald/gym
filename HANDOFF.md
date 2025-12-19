@@ -20,19 +20,17 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-29 COMPLETE** | **Next: Task 30 - PR Detection & Display**
+**Tasks 1-30 COMPLETE** | **Next: Task 31 - Cardio Distance Chart**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
 |------|-------------|--------|
-| 22 | Combined Workout History (ActivityList) | 53c11b9 |
-| 23 | Data Export to JSON | 8de5a79 |
-| 24 | Data Import with Validation | a59fcd4 |
 | 25 | Mock Data Seeding | 92003aa |
 | 26 | Progress Page Layout | 2f2e9c1 |
 | 27 | Recharts Setup & Base Chart | f7b8cf3 |
 | 28 | Weight Progress Chart | 0108893 |
 | 29 | Volume Chart | 4e5f007 |
+| 30 | PR Detection & Display | 3bf7b77 |
 
 ## Project Structure
 
@@ -112,16 +110,15 @@ import { exportAllData, downloadAsJson } from '../lib/dataExport';
 import { validateImportFile, importData } from '../lib/dataImport';
 ```
 
-## Next Task: Task 30 - PR Detection & Display
+## Next Task: Task 31 - Cardio Distance Chart
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2620. This task involves:
-1. Create `src/lib/prDetection.ts` with functions:
-   - `getExercisePR(exerciseId)` - Get PR for specific exercise
-   - `getAllPRs()` - Get all current PRs
-   - `isPR(exerciseId, weight)` - Check if a set is a PR
-2. Create PRBadge and PRList components
-3. Integrate PR indicators into WeightProgressChart
-4. Add PR list to Progress page
+Reference `TASK-CHECKLIST-FULL.md` around line 2662. This task involves:
+1. Add `getCardioDistanceData(type?, startDate, endDate)` to progressQueries.ts
+2. Create CardioDistanceChart component:
+   - Line chart with date on X-axis, distance on Y-axis
+   - Filter by cardio type (treadmill, bike, all)
+   - Handle sessions without distance data
+   - Display correct unit (miles/km)
 
 ## Verification Before Starting
 
