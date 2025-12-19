@@ -15,12 +15,12 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-12 COMPLETE** | **Next: Task 13 - Set Input Component**
+**Tasks 1-13 COMPLETE** | **Next: Task 14 - Workout Logger Page**
 
 ### Key Documents to Review
 1. `prd-improved.md` - Product requirements
 2. `agentic-guidelines.md` - Development guidelines
-3. `TASK-CHECKLIST-FULL.md` - Full task breakdown (Task 13 starts at line ~1008)
+3. `TASK-CHECKLIST-FULL.md` - Full task breakdown (Task 14 starts at line ~1108)
 4. `claude-progress.txt` - Detailed session logs
 
 ## Project Structure
@@ -112,14 +112,15 @@ const { weightUnit, barbellWeight, setWeightUnit } = useSettingsStore();
 | 10 | React Router Setup | c8fcd1f |
 | 11 | App Shell & Layout Components | 5b31715 |
 | 12 | Exercise Selector Component | ffd97da |
+| 13 | Set Input Component | 2383603 |
 
-## Next Task: Task 13 - Set Input Component
+## Next Task: Task 14 - Workout Logger Page
 
-Reference `TASK-CHECKLIST-FULL.md` around line 1008. This task involves:
-1. Create SetInput component for logging reps and weight
-2. Add increment/decrement buttons for quick input
-3. Support RPE (Rate of Perceived Exertion) optional field
-4. Integrate with settings store for weight unit
+Reference `TASK-CHECKLIST-FULL.md` around line 1108. This task involves:
+1. Create WorkoutTypeSelector component (weights vs cardio toggle)
+2. Build main workout logging page integrating ExerciseSelector and SetInput
+3. Create workout and save sets to IndexedDB
+4. Display logged exercises and sets in current workout
 
 ## Known Gotchas
 

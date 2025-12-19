@@ -4,8 +4,8 @@ CLAUDE PROGRESS LOG - Personal Fitness Tracker PWA
 
 CURRENT STATUS: Paused - Awaiting Approval
 LAST UPDATED: December 19, 2025
-CURRENT TASK: Task 12 - Exercise Selector Component (COMPLETE)
-NEXT TASK: Task 13 - Set Input Component
+CURRENT TASK: Task 13 - Set Input Component (COMPLETE)
+NEXT TASK: Task 14 - Workout Logger Page
 
 --------------------------------------------------------------------------------
 SESSION LOG
@@ -122,8 +122,21 @@ SESSION LOG
   - All 133 tests passing
   - Commit: ffd97da
 
-### For Next Session
 - Task 13: Set Input Component
+  - Created src/components/workout/SetInput.tsx
+  - Features:
+    - Reps input with +/- buttons
+    - Weight input with +/- buttons (2.5kg or 5lbs increments)
+    - Optional RPE field (1-10 scale)
+    - Settings store integration for weight unit display
+    - Validation: save disabled when reps or weight is 0
+    - Touch-friendly 44px targets
+  - Added 17 component tests
+  - All 150 tests passing
+  - Commit: 2383603
+
+### For Next Session
+- Task 14: Workout Logger Page
 
 --------------------------------------------------------------------------------
 KNOWN ISSUES
