@@ -20,14 +20,11 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-28 COMPLETE** | **Next: Task 29 - Volume Chart**
+**Tasks 1-29 COMPLETE** | **Next: Task 30 - PR Detection & Display**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
 |------|-------------|--------|
-| 19 | Stationary Bike Form Component | e8543e2 |
-| 20 | Cardio Logger Integration | 96977c4 |
-| 21 | Cardio Session Card Component | 6cc93d1 |
 | 22 | Combined Workout History (ActivityList) | 53c11b9 |
 | 23 | Data Export to JSON | 8de5a79 |
 | 24 | Data Import with Validation | a59fcd4 |
@@ -35,6 +32,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 | 26 | Progress Page Layout | 2f2e9c1 |
 | 27 | Recharts Setup & Base Chart | f7b8cf3 |
 | 28 | Weight Progress Chart | 0108893 |
+| 29 | Volume Chart | 4e5f007 |
 
 ## Project Structure
 
@@ -114,14 +112,16 @@ import { exportAllData, downloadAsJson } from '../lib/dataExport';
 import { validateImportFile, importData } from '../lib/dataImport';
 ```
 
-## Next Task: Task 29 - Volume Chart
+## Next Task: Task 30 - PR Detection & Display
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2596. This task involves:
-1. Add `getVolumeProgressData()` to progressQueries.ts
-2. Create VolumeChart component (bar or line chart)
-3. Calculate volume as sum(sets × reps × weight)
-4. Support per-exercise or total workout volume
-5. Integrate into Progress page with toggle/tab
+Reference `TASK-CHECKLIST-FULL.md` around line 2620. This task involves:
+1. Create `src/lib/prDetection.ts` with functions:
+   - `getExercisePR(exerciseId)` - Get PR for specific exercise
+   - `getAllPRs()` - Get all current PRs
+   - `isPR(exerciseId, weight)` - Check if a set is a PR
+2. Create PRBadge and PRList components
+3. Integrate PR indicators into WeightProgressChart
+4. Add PR list to Progress page
 
 ## Verification Before Starting
 
