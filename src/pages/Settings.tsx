@@ -1,8 +1,14 @@
+import { Header } from '../components/layout';
+
 export default function Settings() {
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">Settings</h1>
-      <p>Settings and data management will go here</p>
-    </div>
+    <>
+      <Header title="Settings" />
+      <div className="p-4">
+        <p className="text-gray-600 dark:text-gray-400">
+          Settings and data management will go here
+        </p>
+      </div>
+    </>
   );
 }

@@ -1,8 +1,14 @@
+import { Header } from '../components/layout';
+
 export default function Home() {
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">Home</h1>
-      <p>Workout logging will go here</p>
-    </div>
+    <>
+      <Header title="Home" />
+      <div className="p-4">
+        <p className="text-gray-600 dark:text-gray-400">
+          Workout logging will go here
+        </p>
+      </div>
+    </>
   );
 }

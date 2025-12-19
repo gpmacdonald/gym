@@ -1,8 +1,14 @@
+import { Header } from '../components/layout';
+
 export default function Progress() {
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">Progress</h1>
-      <p>Charts and stats will go here</p>
-    </div>
+    <>
+      <Header title="Progress" />
+      <div className="p-4">
+        <p className="text-gray-600 dark:text-gray-400">
+          Charts and stats will go here
+        </p>
+      </div>
+    </>
   );
 }
