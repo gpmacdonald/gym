@@ -1,5 +1,5 @@
 import { db } from './db';
-import type { Workout } from '../types';
+import type { Workout, WorkoutSet } from '../types';
 
 export interface WeightProgressDataPoint {
   date: Date;
@@ -125,4 +125,93 @@ export async function getExercisePR(
     weight: prPoint.maxWeight,
     date: prPoint.date,
   };
+}
+
+export interface VolumeProgressDataPoint {
+  date: Date;
+  volume: number;
+  workoutId: string;
+}
+
+/**
+ * Get volume progress data over a time range.
+ * Volume = sum of (reps × weight) for all sets.
+ *
+ * @param exerciseId - If provided, calculates volume for specific exercise only.
+ *                     If null, calculates total workout volume across all exercises.
+ * @param startDate - Start of date range (inclusive)
+ * @param endDate - End of date range (inclusive)
+ */
+export async function getVolumeProgressData(
+  exerciseId: string | null,
+  startDate: Date | null,
+  endDate: Date | null
+): Promise<VolumeProgressDataPoint[]> {
+  // Get sets - either for specific exercise or all sets
+  let sets: WorkoutSet[];
+
+  if (exerciseId) {
+    sets = await db.workoutSets
+      .where('exerciseId')
+      .equals(exerciseId)
+      .toArray();
+  } else {
+    sets = await db.workoutSets.toArray();
+  }
+
+  if (sets.length === 0) {
+    return [];
+  }
+
+  // Get all workout IDs from the sets
+  const workoutIds = [...new Set(sets.map((s) => s.workoutId))];
+
+  // Fetch all related workouts
+  const workouts = await db.workouts.bulkGet(workoutIds);
+  const workoutMap = new Map<string, Workout>();
+  workouts.forEach((w) => {
+    if (w) workoutMap.set(w.id, w);
+  });
+
+  // Group sets by workout and calculate total volume per workout
+  const workoutVolumes = new Map<string, { date: Date; volume: number }>();
+
+  for (const set of sets) {
+    const workout = workoutMap.get(set.workoutId);
+    if (!workout) continue;
+
+    const workoutDate = new Date(workout.date);
+
+    // Apply date filters
+    if (startDate && workoutDate < startDate) continue;
+    if (endDate && workoutDate > endDate) continue;
+
+    // Calculate volume for this set: reps × weight
+    const setVolume = set.reps * set.weight;
+
+    const existing = workoutVolumes.get(set.workoutId);
+    if (existing) {
+      existing.volume += setVolume;
+    } else {
+      workoutVolumes.set(set.workoutId, {
+        date: workoutDate,
+        volume: setVolume,
+      });
+    }
+  }
+
+  // Convert to array
+  const dataPoints: VolumeProgressDataPoint[] = [];
+  workoutVolumes.forEach((data, workoutId) => {
+    dataPoints.push({
+      date: data.date,
+      volume: data.volume,
+      workoutId,
+    });
+  });
+
+  // Sort by date ascending
+  dataPoints.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  return dataPoints;
 }

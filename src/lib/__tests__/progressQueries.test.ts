@@ -1,5 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { getWeightProgressData, getExercisePR } from '../progressQueries';
+import {
+  getWeightProgressData,
+  getExercisePR,
+  getVolumeProgressData,
+} from '../progressQueries';
 import { db } from '../db';
 import { seedExercises } from '../seed';
 
@@ -267,6 +271,201 @@ describe('progressQueries', () => {
 
       expect(pr).not.toBeNull();
       expect(pr?.weight).toBe(100);
+    });
+  });
+
+  describe('getVolumeProgressData', () => {
+    let squatId: string;
+
+    beforeEach(async () => {
+      const exercises = await db.exercises.toArray();
+      const squat = exercises.find((e) => e.name === 'Barbell Squat');
+      squatId = squat?.id || '';
+    });
+
+    it('should return empty array when no data exists', async () => {
+      const data = await getVolumeProgressData(benchPressId, null, null);
+      expect(data).toEqual([]);
+    });
+
+    it('should calculate volume correctly for a single exercise', async () => {
+      await db.workouts.add({
+        id: 'workout-1',
+        date: new Date('2025-12-15'),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      // Add sets: 3×10×60kg = 1800kg volume, 3×8×80kg = 1920kg volume
+      await db.workoutSets.bulkAdd([
+        {
+          id: 'set-1',
+          workoutId: 'workout-1',
+          exerciseId: benchPressId,
+          setNumber: 1,
+          weight: 60,
+          reps: 10,
+          createdAt: new Date(),
+        },
+        {
+          id: 'set-2',
+          workoutId: 'workout-1',
+          exerciseId: benchPressId,
+          setNumber: 2,
+          weight: 80,
+          reps: 8,
+          createdAt: new Date(),
+        },
+      ]);
+
+      const data = await getVolumeProgressData(benchPressId, null, null);
+
+      expect(data).toHaveLength(1);
+      // Volume = (10 × 60) + (8 × 80) = 600 + 640 = 1240
+      expect(data[0].volume).toBe(1240);
+    });
+
+    it('should calculate total workout volume when exerciseId is null', async () => {
+      await db.workouts.add({
+        id: 'workout-1',
+        date: new Date('2025-12-15'),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      // Add sets for different exercises
+      await db.workoutSets.bulkAdd([
+        {
+          id: 'set-1',
+          workoutId: 'workout-1',
+          exerciseId: benchPressId,
+          setNumber: 1,
+          weight: 80,
+          reps: 10,
+          createdAt: new Date(),
+        },
+        {
+          id: 'set-2',
+          workoutId: 'workout-1',
+          exerciseId: squatId,
+          setNumber: 1,
+          weight: 100,
+          reps: 8,
+          createdAt: new Date(),
+        },
+      ]);
+
+      const data = await getVolumeProgressData(null, null, null);
+
+      expect(data).toHaveLength(1);
+      // Volume = (10 × 80) + (8 × 100) = 800 + 800 = 1600
+      expect(data[0].volume).toBe(1600);
+    });
+
+    it('should return data for multiple workouts sorted by date', async () => {
+      await db.workouts.bulkAdd([
+        {
+          id: 'workout-1',
+          date: new Date('2025-12-20'),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'workout-2',
+          date: new Date('2025-12-10'),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
+
+      await db.workoutSets.bulkAdd([
+        {
+          id: 'set-1',
+          workoutId: 'workout-1',
+          exerciseId: benchPressId,
+          setNumber: 1,
+          weight: 80,
+          reps: 10,
+          createdAt: new Date(),
+        },
+        {
+          id: 'set-2',
+          workoutId: 'workout-2',
+          exerciseId: benchPressId,
+          setNumber: 1,
+          weight: 60,
+          reps: 10,
+          createdAt: new Date(),
+        },
+      ]);
+
+      const data = await getVolumeProgressData(benchPressId, null, null);
+
+      expect(data).toHaveLength(2);
+      expect(data[0].volume).toBe(600); // Dec 10: 10 × 60 = 600
+      expect(data[1].volume).toBe(800); // Dec 20: 10 × 80 = 800
+    });
+
+    it('should filter by date range', async () => {
+      await db.workouts.bulkAdd([
+        {
+          id: 'workout-1',
+          date: new Date('2025-12-01'),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'workout-2',
+          date: new Date('2025-12-15'),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'workout-3',
+          date: new Date('2025-12-25'),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
+
+      await db.workoutSets.bulkAdd([
+        {
+          id: 'set-1',
+          workoutId: 'workout-1',
+          exerciseId: benchPressId,
+          setNumber: 1,
+          weight: 60,
+          reps: 10,
+          createdAt: new Date(),
+        },
+        {
+          id: 'set-2',
+          workoutId: 'workout-2',
+          exerciseId: benchPressId,
+          setNumber: 1,
+          weight: 70,
+          reps: 10,
+          createdAt: new Date(),
+        },
+        {
+          id: 'set-3',
+          workoutId: 'workout-3',
+          exerciseId: benchPressId,
+          setNumber: 1,
+          weight: 80,
+          reps: 10,
+          createdAt: new Date(),
+        },
+      ]);
+
+      const data = await getVolumeProgressData(
+        benchPressId,
+        new Date('2025-12-10'),
+        new Date('2025-12-20')
+      );
+
+      expect(data).toHaveLength(1);
+      expect(data[0].volume).toBe(700); // 10 × 70 = 700
     });
   });
 });

@@ -6,15 +6,19 @@ import {
   ExerciseDropdown,
   CardioTypeDropdown,
   WeightProgressChart,
+  VolumeChart,
   getStartDateForRange,
   type TimeRange,
   type CardioFilter,
 } from '../components/progress';
 
 type ViewType = 'weights' | 'cardio';
+type WeightsChartType = 'weight' | 'volume';
 
 export default function Progress() {
   const [view, setView] = useState<ViewType>('weights');
+  const [weightsChartType, setWeightsChartType] =
+    useState<WeightsChartType>('weight');
   const [timeRange, setTimeRange] = useState<TimeRange>('3M');
   const [selectedExercise, setSelectedExercise] = useState<string | null>(null);
   const [cardioFilter, setCardioFilter] = useState<CardioFilter>('all');
@@ -67,14 +71,50 @@ export default function Progress() {
         {/* Time Range Tabs */}
         <TimeRangeTabs value={timeRange} onChange={setTimeRange} />
 
+        {/* Chart Type Toggle (Weights only) */}
+        {view === 'weights' && (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setWeightsChartType('weight')}
+              className={`flex-1 py-2 text-sm font-medium rounded-md transition ${
+                weightsChartType === 'weight'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              }`}
+            >
+              Weight
+            </button>
+            <button
+              type="button"
+              onClick={() => setWeightsChartType('volume')}
+              className={`flex-1 py-2 text-sm font-medium rounded-md transition ${
+                weightsChartType === 'volume'
+                  ? 'bg-emerald-500 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              }`}
+            >
+              Volume
+            </button>
+          </div>
+        )}
+
         {/* Chart */}
         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
           {view === 'weights' ? (
-            <WeightProgressChart
-              exerciseId={selectedExercise}
-              startDate={startDate}
-              endDate={endDate}
-            />
+            weightsChartType === 'weight' ? (
+              <WeightProgressChart
+                exerciseId={selectedExercise}
+                startDate={startDate}
+                endDate={endDate}
+              />
+            ) : (
+              <VolumeChart
+                exerciseId={selectedExercise}
+                startDate={startDate}
+                endDate={endDate}
+              />
+            )
           ) : (
             <div className="min-h-[300px] flex items-center justify-center">
               <p className="text-gray-500 dark:text-gray-400">
