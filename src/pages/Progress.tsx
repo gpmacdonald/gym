@@ -8,6 +8,7 @@ import {
   WeightProgressChart,
   VolumeChart,
   PRList,
+  CardioDistanceChart,
   getStartDateForRange,
   type TimeRange,
   type CardioFilter,
@@ -117,11 +118,11 @@ export default function Progress() {
               />
             )
           ) : (
-            <div className="min-h-[300px] flex items-center justify-center">
-              <p className="text-gray-500 dark:text-gray-400">
-                Cardio progress chart coming soon
-              </p>
-            </div>
+            <CardioDistanceChart
+              cardioType={cardioFilter === 'all' ? null : cardioFilter}
+              startDate={startDate}
+              endDate={endDate}
+            />
           )}
         </div>
 

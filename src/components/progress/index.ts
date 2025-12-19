@@ -15,3 +15,5 @@ export { default as VolumeChart } from './VolumeChart';
 export { default as PRBadge } from './PRBadge';
 
 export { default as PRList } from './PRList';
+
+export { default as CardioDistanceChart } from './CardioDistanceChart';

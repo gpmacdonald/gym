@@ -1,5 +1,5 @@
 import { db } from './db';
-import type { Workout, WorkoutSet } from '../types';
+import type { Workout, WorkoutSet, CardioType } from '../types';
 
 export interface WeightProgressDataPoint {
   date: Date;
@@ -209,6 +209,64 @@ export async function getVolumeProgressData(
       workoutId,
     });
   });
+
+  // Sort by date ascending
+  dataPoints.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  return dataPoints;
+}
+
+export interface CardioDistanceDataPoint {
+  date: Date;
+  distance: number; // in miles (stored unit)
+  sessionId: string;
+  type: CardioType;
+}
+
+/**
+ * Get cardio distance data over a time range.
+ *
+ * @param type - Filter by cardio type ('treadmill', 'stationary-bike'), or null for all types
+ * @param startDate - Start of date range (inclusive)
+ * @param endDate - End of date range (inclusive)
+ */
+export async function getCardioDistanceData(
+  type: CardioType | null,
+  startDate: Date | null,
+  endDate: Date | null
+): Promise<CardioDistanceDataPoint[]> {
+  // Get all cardio sessions
+  let sessions = await db.cardioSessions.toArray();
+
+  // Filter by type if specified
+  if (type) {
+    sessions = sessions.filter((s) => s.type === type);
+  }
+
+  // Filter out sessions without distance data
+  sessions = sessions.filter((s) => s.distance !== undefined && s.distance > 0);
+
+  if (sessions.length === 0) {
+    return [];
+  }
+
+  // Apply date filters and build data points
+  const dataPoints: CardioDistanceDataPoint[] = [];
+
+  for (const session of sessions) {
+    const sessionDate = new Date(session.date);
+
+    // Apply date filters
+    if (startDate && sessionDate < startDate) continue;
+    if (endDate && sessionDate > endDate) continue;
+
+    dataPoints.push({
+      date: sessionDate,
+      distance: session.distance!,
+      sessionId: session.id,
+      type: session.type,
+    });
+  }
 
   // Sort by date ascending
   dataPoints.sort((a, b) => a.date.getTime() - b.date.getTime());
