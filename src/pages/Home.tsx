@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Plus, Dumbbell } from 'lucide-react';
+import { Plus, Dumbbell, Heart } from 'lucide-react';
 import { Header } from '../components/layout';
 import {
   WorkoutTypeSelector,
   WorkoutLogger,
   WorkoutList,
 } from '../components/workout';
+import { CardioLogger } from '../components/cardio';
 
 type WorkoutType = 'weights' | 'cardio';
 
@@ -13,6 +14,7 @@ export default function Home() {
   const [isWorkoutActive, setIsWorkoutActive] = useState(false);
   const [workoutType, setWorkoutType] = useState<WorkoutType>('weights');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [successType, setSuccessType] = useState<WorkoutType>('weights');
   const [refreshKey, setRefreshKey] = useState(0);
 
   const handleStartWorkout = () => {
@@ -23,6 +25,7 @@ export default function Home() {
   const handleCompleteWorkout = () => {
     setIsWorkoutActive(false);
     setShowSuccess(true);
+    setSuccessType(workoutType);
     setRefreshKey((prev) => prev + 1); // Refresh workout list
     // Hide success message after 3 seconds
     setTimeout(() => setShowSuccess(false), 3000);
@@ -46,8 +49,15 @@ export default function Home() {
         {/* Success Message */}
         {showSuccess && (
           <div className="mb-4 p-4 bg-success/10 border border-success/20 rounded-lg text-success flex items-center gap-2">
-            <Dumbbell className="w-5 h-5" />
-            <span>Workout saved successfully!</span>
+            {successType === 'weights' ? (
+              <Dumbbell className="w-5 h-5" />
+            ) : (
+              <Heart className="w-5 h-5" />
+            )}
+            <span>
+              {successType === 'weights' ? 'Workout' : 'Cardio session'} saved
+              successfully!
+            </span>
           </div>
         )}
 
@@ -59,9 +69,10 @@ export default function Home() {
               onCancel={handleCancelWorkout}
             />
           ) : (
-            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-              <p>Cardio logging coming soon!</p>
-            </div>
+            <CardioLogger
+              onComplete={handleCompleteWorkout}
+              onCancel={handleCancelWorkout}
+            />
           )
         ) : (
           <>
