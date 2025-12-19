@@ -15,12 +15,12 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-10 COMPLETE** | **Next: Task 11 - App Shell & Layout Components**
+**Tasks 1-11 COMPLETE** | **Next: Task 12 - Exercise Selector Component**
 
 ### Key Documents to Review
 1. `prd-improved.md` - Product requirements
 2. `agentic-guidelines.md` - Development guidelines
-3. `TASK-CHECKLIST-FULL.md` - Full task breakdown (Task 11 starts at line ~801)
+3. `TASK-CHECKLIST-FULL.md` - Full task breakdown (Task 12 starts at line ~918)
 4. `claude-progress.txt` - Detailed session logs
 
 ## Project Structure
@@ -110,15 +110,15 @@ const { weightUnit, barbellWeight, setWeightUnit } = useSettingsStore();
 | - | Equipment Types + Weight Utils | ce387b3 |
 | 9 | Zustand Settings Store | 9f71cc8 |
 | 10 | React Router Setup | c8fcd1f |
+| 11 | App Shell & Layout Components | 5b31715 |
 
-## Next Task: Task 11 - App Shell & Layout Components
+## Next Task: Task 12 - Exercise Selector Component
 
-Reference `TASK-CHECKLIST-FULL.md` around line 801. This task involves:
-1. Install lucide-react for icons
-2. Create `src/components/layout/BottomNav.tsx` - Bottom navigation bar
-3. Create `src/components/layout/Header.tsx` - Page headers
-4. Create `src/components/layout/AppShell.tsx` - Main app container
-5. Add safe-area padding for iPhone notch/home indicator
+Reference `TASK-CHECKLIST-FULL.md` around line 918. This task involves:
+1. Create searchable/filterable exercise dropdown
+2. Support muscle group filtering
+3. Show recently used exercises at top
+4. Integrate with Dexie exercise queries
 
 ## Known Gotchas
 

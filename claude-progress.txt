@@ -4,8 +4,8 @@ CLAUDE PROGRESS LOG - Personal Fitness Tracker PWA
 
 CURRENT STATUS: Paused - Awaiting Approval
 LAST UPDATED: December 19, 2025
-CURRENT TASK: Task 10 - React Router Setup (COMPLETE)
-NEXT TASK: Task 11 - App Shell & Layout Components
+CURRENT TASK: Task 11 - App Shell & Layout Components (COMPLETE)
+NEXT TASK: Task 12 - Exercise Selector Component
 
 --------------------------------------------------------------------------------
 SESSION LOG
@@ -96,8 +96,22 @@ SESSION LOG
   - All 111 tests passing
   - Commit: c8fcd1f
 
-### For Next Session
 - Task 11: App Shell & Layout Components
+  - Installed lucide-react for icons
+  - Created src/components/layout/:
+    - BottomNav.tsx: 4-tab navigation (Home, Progress, Exercises, Settings)
+    - Header.tsx: Page header with title and optional right action
+    - AppShell.tsx: Main wrapper with bottom padding
+    - index.ts: Barrel export
+  - Added safe-area padding for iPhone notch/home indicator
+  - Integrated AppShell into App.tsx
+  - Updated all page components to use Header
+  - Added 12 layout component tests
+  - All 123 tests passing
+  - Commit: 5b31715
+
+### For Next Session
+- Task 12: Exercise Selector Component
 
 --------------------------------------------------------------------------------
 KNOWN ISSUES
