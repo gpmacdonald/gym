@@ -7,7 +7,8 @@ describe('App', () => {
     render(<App />);
     // Check for the header title
     expect(screen.getByRole('heading', { name: 'Home' })).toBeInTheDocument();
-    expect(screen.getByText('Workout logging will go here')).toBeInTheDocument();
+    // Check for start workout button
+    expect(screen.getByText(/Start.*Workout/)).toBeInTheDocument();
   });
 
   it('should render within HashRouter with AppShell', () => {

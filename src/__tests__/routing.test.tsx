@@ -23,7 +23,7 @@ describe('Routing', () => {
     it('should render home page at root path', () => {
       renderWithRouter('/');
       expect(screen.getByRole('heading', { name: 'Home' })).toBeInTheDocument();
-      expect(screen.getByText('Workout logging will go here')).toBeInTheDocument();
+      expect(screen.getByText(/Start.*Workout/)).toBeInTheDocument();
     });
   });
 
