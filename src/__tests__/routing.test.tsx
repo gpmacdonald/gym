@@ -31,7 +31,9 @@ describe('Routing', () => {
     it('should render progress page at /progress', () => {
       renderWithRouter('/progress');
       expect(screen.getByRole('heading', { name: 'Progress' })).toBeInTheDocument();
-      expect(screen.getByText('Charts and stats will go here')).toBeInTheDocument();
+      // Verify the weight/cardio toggle is present
+      expect(screen.getByRole('button', { name: /Weights/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Cardio/i })).toBeInTheDocument();
     });
   });
 
