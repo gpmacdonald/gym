@@ -4,8 +4,8 @@ CLAUDE PROGRESS LOG - Personal Fitness Tracker PWA
 
 CURRENT STATUS: Paused - Awaiting Approval
 LAST UPDATED: December 18, 2025
-CURRENT TASK: Task 3 - Tailwind CSS Setup (COMPLETE)
-NEXT TASK: Task 4 - Vitest & React Testing Library Setup
+CURRENT TASK: Task 4 - Vitest & React Testing Library Setup (COMPLETE)
+NEXT TASK: Task 5 - TypeScript Types Definition
 
 --------------------------------------------------------------------------------
 SESSION LOG
@@ -31,28 +31,34 @@ SESSION LOG
 - Task 3: Tailwind CSS Setup
   - Installed Tailwind CSS v4 with @tailwindcss/vite plugin
   - Configured custom theme in index.css using @theme directive
-  - Added colors from PRD: primary, primary-light
-  - Added semantic colors: success, warning, error, info
-  - Added surface/background/text/border colors for light/dark modes
+  - Added colors from PRD (primary, semantic, surface/background)
   - Set up dark mode support via .dark class
-  - Removed App.css, updated App.tsx with Tailwind demo
   - Commit: 25d43e3
 
-### Verification - Task 3
-- [x] Tailwind classes apply correctly (tested bg-primary, text-primary)
-- [x] Custom colors work as expected (primary, success, etc.)
-- [x] Dark mode classes work (via .dark class)
-- [x] Build completes without CSS errors
-- [x] npm run lint passes
-- [x] npm run format completes successfully
+- Task 4: Vitest & React Testing Library Setup
+  - Installed vitest, jsdom, @testing-library/react, @testing-library/jest-dom
+  - Installed @testing-library/user-event and @vitest/coverage-v8
+  - Created vitest.config.ts with jsdom environment and v8 coverage
+  - Created src/test/setup.ts with jest-dom imports
+  - Added test scripts: test, test:watch, test:coverage
+  - Created sample tests (setup.test.ts and App.test.tsx)
+  - Updated tsconfig.app.json with jest-dom types
+  - Commit: 8a455d0
+
+### Verification - Task 4
+- [x] npm test runs without errors (5 tests passing)
+- [x] Sample test passes
+- [x] Coverage report generates with npm run test:coverage (100% coverage)
+- [x] React Testing Library can render components
+- [x] userEvent interactions work correctly
 
 ### Notes
-- Using Tailwind CSS v4 (installed by default with npm)
-- Tailwind v4 uses CSS-based config with @theme instead of tailwind.config.js
-- Using @tailwindcss/vite plugin for Vite integration
+- Using Vitest v4 (latest)
+- Coverage provider: v8 (faster than istanbul)
+- All 5 tests pass: 2 setup tests + 3 App component tests
 
 ### For Next Session
-- Task 4: Vitest & React Testing Library Setup
+- Task 5: TypeScript Types Definition
 
 --------------------------------------------------------------------------------
 KNOWN ISSUES
@@ -67,3 +73,5 @@ ARCHITECTURE DECISIONS
 - ESLint: Using ESLint 9 flat config (not legacy .eslintrc.cjs)
 - Tailwind: Using v4 with @theme CSS directive (not tailwind.config.js)
 - Dark mode: Class-based (.dark) for manual toggle control
+- Testing: Vitest + React Testing Library + jsdom environment
+- Coverage: v8 provider with text and html reporters
