@@ -12,6 +12,7 @@ import {
   CardioDurationChart,
   CardioPaceChart,
   CardioIntensityChart,
+  CardioSummaryStats,
   getStartDateForRange,
   type TimeRange,
   type CardioFilter,
@@ -210,42 +211,13 @@ export default function Progress() {
           </div>
         )}
 
-        {/* Cardio Stats Placeholder */}
+        {/* Cardio Summary Stats */}
         {view === 'cardio' && (
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Total Distance
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                --
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Total Time
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                --
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Sessions
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                --
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Avg Duration
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                --
-              </p>
-            </div>
-          </div>
+          <CardioSummaryStats
+            cardioType={cardioFilter === 'all' ? null : cardioFilter}
+            startDate={startDate}
+            endDate={endDate}
+          />
         )}
       </div>
     </>

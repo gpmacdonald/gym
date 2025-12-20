@@ -20,7 +20,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-33 COMPLETE** | **Next: Task 34 - Summary Statistics Component**
+**Tasks 1-34 COMPLETE** | **Next: Task 35 - Exercise Library (CRUD)**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
@@ -32,6 +32,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 | 31 | Cardio Distance Chart | 6f89faa |
 | 32 | Cardio Duration & Pace Charts | f074f8f |
 | 33 | Cardio Intensity Chart | f8cba4f |
+| 34 | Summary Statistics Component | pending |
 
 ## Project Structure
 
@@ -115,15 +116,14 @@ import { exportAllData, downloadAsJson } from '../lib/dataExport';
 import { validateImportFile, importData } from '../lib/dataImport';
 ```
 
-## Next Task: Task 34 - Summary Statistics Component
+## Next Task: Task 35 - Progress Page Integration
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2737. This task involves:
-1. Create `src/lib/statsQueries.ts` with stats calculations:
-   - totalWorkouts, totalCardioSessions, totalVolume
-   - totalCardioTime, totalCardioDistance
-   - workoutsPerWeek (average), mostTrainedMuscle
-2. Create SummaryStats component to display these stats
-3. Replace the cardio stats placeholders with real data
+Reference `TASK-CHECKLIST-FULL.md` around line 2779. This task involves:
+1. Connect view toggle to show correct charts (already done)
+2. Connect exercise/cardio selectors to charts (already done)
+3. Add lazy loading for chart components
+4. Performance optimization (memoization)
+5. Add refresh functionality when returning to page
 
 ## Verification Before Starting
 

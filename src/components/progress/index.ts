@@ -23,3 +23,7 @@ export { default as CardioDurationChart } from './CardioDurationChart';
 export { default as CardioPaceChart } from './CardioPaceChart';
 
 export { default as CardioIntensityChart } from './CardioIntensityChart';
+
+export { default as StatsCard } from './StatsCard';
+
+export { default as CardioSummaryStats } from './CardioSummaryStats';
