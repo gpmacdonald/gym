@@ -4,6 +4,8 @@ import {
   getExercisePR,
   getVolumeProgressData,
   getCardioDistanceData,
+  getCardioDurationData,
+  getCardioPaceData,
 } from '../progressQueries';
 import { db } from '../db';
 import { seedExercises } from '../seed';
@@ -633,6 +635,301 @@ describe('progressQueries', () => {
       expect(data).toHaveLength(2);
       expect(data[0].distance).toBe(3.0); // Earlier date first
       expect(data[1].distance).toBe(4.0);
+    });
+  });
+
+  describe('getCardioDurationData', () => {
+    it('should return empty array when no cardio sessions exist', async () => {
+      const data = await getCardioDurationData(null, null, null);
+      expect(data).toEqual([]);
+    });
+
+    it('should return all sessions with duration data', async () => {
+      await db.cardioSessions.bulkAdd([
+        {
+          id: 'cardio-1',
+          date: new Date('2025-12-15'),
+          type: 'treadmill',
+          duration: 1800, // 30 min
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'cardio-2',
+          date: new Date('2025-12-16'),
+          type: 'stationary-bike',
+          duration: 2400, // 40 min
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
+
+      const data = await getCardioDurationData(null, null, null);
+
+      expect(data).toHaveLength(2);
+      expect(data[0].duration).toBe(1800);
+      expect(data[1].duration).toBe(2400);
+    });
+
+    it('should filter by cardio type', async () => {
+      await db.cardioSessions.bulkAdd([
+        {
+          id: 'cardio-1',
+          date: new Date('2025-12-15'),
+          type: 'treadmill',
+          duration: 1800,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'cardio-2',
+          date: new Date('2025-12-16'),
+          type: 'stationary-bike',
+          duration: 2400,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
+
+      const treadmillData = await getCardioDurationData('treadmill', null, null);
+      expect(treadmillData).toHaveLength(1);
+      expect(treadmillData[0].type).toBe('treadmill');
+
+      const bikeData = await getCardioDurationData('stationary-bike', null, null);
+      expect(bikeData).toHaveLength(1);
+      expect(bikeData[0].type).toBe('stationary-bike');
+    });
+
+    it('should filter by date range', async () => {
+      await db.cardioSessions.bulkAdd([
+        {
+          id: 'cardio-1',
+          date: new Date('2025-12-01'),
+          type: 'treadmill',
+          duration: 1500,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'cardio-2',
+          date: new Date('2025-12-15'),
+          type: 'treadmill',
+          duration: 1800,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'cardio-3',
+          date: new Date('2025-12-25'),
+          type: 'treadmill',
+          duration: 2100,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
+
+      const data = await getCardioDurationData(
+        null,
+        new Date('2025-12-10'),
+        new Date('2025-12-20')
+      );
+
+      expect(data).toHaveLength(1);
+      expect(data[0].duration).toBe(1800);
+    });
+
+    it('should sort by date ascending', async () => {
+      await db.cardioSessions.bulkAdd([
+        {
+          id: 'cardio-1',
+          date: new Date('2025-12-20'),
+          type: 'treadmill',
+          duration: 2400,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'cardio-2',
+          date: new Date('2025-12-10'),
+          type: 'treadmill',
+          duration: 1800,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
+
+      const data = await getCardioDurationData(null, null, null);
+
+      expect(data).toHaveLength(2);
+      expect(data[0].duration).toBe(1800); // Earlier date first
+      expect(data[1].duration).toBe(2400);
+    });
+  });
+
+  describe('getCardioPaceData', () => {
+    it('should return empty array when no cardio sessions exist', async () => {
+      const data = await getCardioPaceData(null, null, null);
+      expect(data).toEqual([]);
+    });
+
+    it('should return sessions with both distance and duration', async () => {
+      await db.cardioSessions.bulkAdd([
+        {
+          id: 'cardio-1',
+          date: new Date('2025-12-15'),
+          type: 'treadmill',
+          duration: 1800, // 30 min
+          distance: 3.0, // 3 miles
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'cardio-2',
+          date: new Date('2025-12-16'),
+          type: 'treadmill',
+          duration: 2400, // 40 min
+          distance: 4.0, // 4 miles
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
+
+      const data = await getCardioPaceData(null, null, null);
+
+      expect(data).toHaveLength(2);
+      // Pace = minutes / distance = 30 / 3 = 10 min/mile
+      expect(data[0].pace).toBe(10);
+      // Speed = distance / hours = 3 / 0.5 = 6 mph
+      expect(data[0].speed).toBe(6);
+    });
+
+    it('should filter out sessions without distance', async () => {
+      await db.cardioSessions.bulkAdd([
+        {
+          id: 'cardio-1',
+          date: new Date('2025-12-15'),
+          type: 'treadmill',
+          duration: 1800,
+          distance: 3.0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'cardio-2',
+          date: new Date('2025-12-16'),
+          type: 'treadmill',
+          duration: 1200,
+          // No distance
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
+
+      const data = await getCardioPaceData(null, null, null);
+
+      expect(data).toHaveLength(1);
+      expect(data[0].pace).toBe(10);
+    });
+
+    it('should filter by cardio type', async () => {
+      await db.cardioSessions.bulkAdd([
+        {
+          id: 'cardio-1',
+          date: new Date('2025-12-15'),
+          type: 'treadmill',
+          duration: 1800,
+          distance: 3.0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'cardio-2',
+          date: new Date('2025-12-16'),
+          type: 'stationary-bike',
+          duration: 2400,
+          distance: 8.0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
+
+      const treadmillData = await getCardioPaceData('treadmill', null, null);
+      expect(treadmillData).toHaveLength(1);
+      expect(treadmillData[0].type).toBe('treadmill');
+
+      const bikeData = await getCardioPaceData('stationary-bike', null, null);
+      expect(bikeData).toHaveLength(1);
+      expect(bikeData[0].type).toBe('stationary-bike');
+    });
+
+    it('should filter by date range', async () => {
+      await db.cardioSessions.bulkAdd([
+        {
+          id: 'cardio-1',
+          date: new Date('2025-12-01'),
+          type: 'treadmill',
+          duration: 1500,
+          distance: 2.5,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'cardio-2',
+          date: new Date('2025-12-15'),
+          type: 'treadmill',
+          duration: 1800,
+          distance: 3.0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'cardio-3',
+          date: new Date('2025-12-25'),
+          type: 'treadmill',
+          duration: 2100,
+          distance: 3.5,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
+
+      const data = await getCardioPaceData(
+        null,
+        new Date('2025-12-10'),
+        new Date('2025-12-20')
+      );
+
+      expect(data).toHaveLength(1);
+      expect(data[0].pace).toBe(10); // 30 min / 3 miles = 10 min/mile
+    });
+
+    it('should sort by date ascending', async () => {
+      await db.cardioSessions.bulkAdd([
+        {
+          id: 'cardio-1',
+          date: new Date('2025-12-20'),
+          type: 'treadmill',
+          duration: 2400, // 40 min
+          distance: 4.0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'cardio-2',
+          date: new Date('2025-12-10'),
+          type: 'treadmill',
+          duration: 1800, // 30 min
+          distance: 3.0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
+
+      const data = await getCardioPaceData(null, null, null);
+
+      expect(data).toHaveLength(2);
+      expect(data[0].pace).toBe(10); // Earlier date first: 30/3 = 10
+      expect(data[1].pace).toBe(10); // Later date: 40/4 = 10
     });
   });
 });

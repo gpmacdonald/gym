@@ -17,3 +17,7 @@ export { default as PRBadge } from './PRBadge';
 export { default as PRList } from './PRList';
 
 export { default as CardioDistanceChart } from './CardioDistanceChart';
+
+export { default as CardioDurationChart } from './CardioDurationChart';
+
+export { default as CardioPaceChart } from './CardioPaceChart';

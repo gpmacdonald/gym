@@ -20,7 +20,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-31 COMPLETE** | **Next: Task 32 - Cardio Duration & Pace Charts**
+**Tasks 1-32 COMPLETE** | **Next: Task 33 - Cardio Intensity Chart**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
@@ -30,6 +30,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 | 29 | Volume Chart | 4e5f007 |
 | 30 | PR Detection & Display | 3bf7b77 |
 | 31 | Cardio Distance Chart | 6f89faa |
+| 32 | Cardio Duration & Pace Charts | pending |
 
 ## Project Structure
 
@@ -39,7 +40,7 @@ C:\Users\Geoff\gym/
 │   ├── components/
 │   │   ├── cardio/           # CardioTypeSelector, TreadmillForm, BikeForm, CardioLogger, CardioCard
 │   │   ├── layout/           # Header, BottomNav
-│   │   ├── progress/         # TimeRangeTabs, ExerciseDropdown, CardioTypeDropdown, BaseChart, WeightProgressChart
+│   │   ├── progress/         # TimeRangeTabs, ExerciseDropdown, CardioTypeDropdown, BaseChart, WeightProgressChart, VolumeChart, CardioDistanceChart, CardioDurationChart, CardioPaceChart, PRBadge, PRList
 │   │   ├── settings/         # DataExport, DataImport
 │   │   └── workout/          # ExerciseSelector, SetInput, WorkoutLogger, WorkoutCard, ActivityList
 │   ├── lib/
@@ -72,10 +73,14 @@ C:\Users\Geoff\gym/
 - Combined activity history with filter tabs (All/Weights/Cardio)
 
 ### Progress Visualization
+- Weights view: Weight & Volume charts with exercise filter
+- Cardio view: Distance, Duration, & Pace charts with type filter
 - Exercise dropdown with recent exercises first
 - Time range selector (1M, 3M, 6M, 1Y, All)
 - Weight progress line chart with PR highlighting
-- Dark mode support for charts
+- Cardio pace chart with pace/speed toggle
+- PRList showing top personal records
+- Dark mode support for all charts
 
 ### Data Management
 - Export all data to JSON backup file
@@ -109,15 +114,15 @@ import { exportAllData, downloadAsJson } from '../lib/dataExport';
 import { validateImportFile, importData } from '../lib/dataImport';
 ```
 
-## Next Task: Task 32 - Cardio Duration & Pace Charts
+## Next Task: Task 33 - Cardio Intensity Chart
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2687. This task involves:
-1. Add query functions to progressQueries.ts:
-   - `getCardioDurationData(type?, startDate, endDate)`
-   - `getCardioPaceData(type?, startDate, endDate)` - pace = distance/duration
-2. Create CardioDurationChart component
-3. Create CardioPaceChart component with speed/pace toggle
-4. Add chart selector in cardio view (Distance | Duration | Pace)
+Reference `TASK-CHECKLIST-FULL.md` around line 2712. This task involves:
+1. Add to progressQueries.ts:
+   - `getCardioIntensityData(type, startDate, endDate)` - returns incline for treadmill, resistance for bike
+2. Create CardioIntensityChart component:
+   - Shows avg incline for treadmill sessions
+   - Shows avg resistance for bike sessions
+3. Add "Intensity" option to cardio chart selector
 
 ## Verification Before Starting
 

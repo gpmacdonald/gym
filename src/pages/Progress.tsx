@@ -9,6 +9,8 @@ import {
   VolumeChart,
   PRList,
   CardioDistanceChart,
+  CardioDurationChart,
+  CardioPaceChart,
   getStartDateForRange,
   type TimeRange,
   type CardioFilter,
@@ -16,11 +18,14 @@ import {
 
 type ViewType = 'weights' | 'cardio';
 type WeightsChartType = 'weight' | 'volume';
+type CardioChartType = 'distance' | 'duration' | 'pace';
 
 export default function Progress() {
   const [view, setView] = useState<ViewType>('weights');
   const [weightsChartType, setWeightsChartType] =
     useState<WeightsChartType>('weight');
+  const [cardioChartType, setCardioChartType] =
+    useState<CardioChartType>('distance');
   const [timeRange, setTimeRange] = useState<TimeRange>('3M');
   const [selectedExercise, setSelectedExercise] = useState<string | null>(null);
   const [cardioFilter, setCardioFilter] = useState<CardioFilter>('all');
@@ -101,6 +106,45 @@ export default function Progress() {
           </div>
         )}
 
+        {/* Chart Type Toggle (Cardio only) */}
+        {view === 'cardio' && (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setCardioChartType('distance')}
+              className={`flex-1 py-2 text-sm font-medium rounded-md transition ${
+                cardioChartType === 'distance'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              }`}
+            >
+              Distance
+            </button>
+            <button
+              type="button"
+              onClick={() => setCardioChartType('duration')}
+              className={`flex-1 py-2 text-sm font-medium rounded-md transition ${
+                cardioChartType === 'duration'
+                  ? 'bg-emerald-500 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              }`}
+            >
+              Duration
+            </button>
+            <button
+              type="button"
+              onClick={() => setCardioChartType('pace')}
+              className={`flex-1 py-2 text-sm font-medium rounded-md transition ${
+                cardioChartType === 'pace'
+                  ? 'bg-purple-500 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              }`}
+            >
+              Pace
+            </button>
+          </div>
+        )}
+
         {/* Chart */}
         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
           {view === 'weights' ? (
@@ -117,8 +161,20 @@ export default function Progress() {
                 endDate={endDate}
               />
             )
-          ) : (
+          ) : cardioChartType === 'distance' ? (
             <CardioDistanceChart
+              cardioType={cardioFilter === 'all' ? null : cardioFilter}
+              startDate={startDate}
+              endDate={endDate}
+            />
+          ) : cardioChartType === 'duration' ? (
+            <CardioDurationChart
+              cardioType={cardioFilter === 'all' ? null : cardioFilter}
+              startDate={startDate}
+              endDate={endDate}
+            />
+          ) : (
+            <CardioPaceChart
               cardioType={cardioFilter === 'all' ? null : cardioFilter}
               startDate={startDate}
               endDate={endDate}

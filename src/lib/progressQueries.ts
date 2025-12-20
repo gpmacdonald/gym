@@ -273,3 +273,131 @@ export async function getCardioDistanceData(
 
   return dataPoints;
 }
+
+export interface CardioDurationDataPoint {
+  date: Date;
+  duration: number; // in seconds
+  sessionId: string;
+  type: CardioType;
+}
+
+/**
+ * Get cardio duration data over a time range.
+ *
+ * @param type - Filter by cardio type ('treadmill', 'stationary-bike'), or null for all types
+ * @param startDate - Start of date range (inclusive)
+ * @param endDate - End of date range (inclusive)
+ */
+export async function getCardioDurationData(
+  type: CardioType | null,
+  startDate: Date | null,
+  endDate: Date | null
+): Promise<CardioDurationDataPoint[]> {
+  // Get all cardio sessions
+  let sessions = await db.cardioSessions.toArray();
+
+  // Filter by type if specified
+  if (type) {
+    sessions = sessions.filter((s) => s.type === type);
+  }
+
+  if (sessions.length === 0) {
+    return [];
+  }
+
+  // Apply date filters and build data points
+  const dataPoints: CardioDurationDataPoint[] = [];
+
+  for (const session of sessions) {
+    const sessionDate = new Date(session.date);
+
+    // Apply date filters
+    if (startDate && sessionDate < startDate) continue;
+    if (endDate && sessionDate > endDate) continue;
+
+    dataPoints.push({
+      date: sessionDate,
+      duration: session.duration,
+      sessionId: session.id,
+      type: session.type,
+    });
+  }
+
+  // Sort by date ascending
+  dataPoints.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  return dataPoints;
+}
+
+export interface CardioPaceDataPoint {
+  date: Date;
+  pace: number; // minutes per mile
+  speed: number; // mph
+  sessionId: string;
+  type: CardioType;
+}
+
+/**
+ * Get cardio pace/speed data over a time range.
+ * Only includes sessions with both distance and duration data.
+ *
+ * @param type - Filter by cardio type ('treadmill', 'stationary-bike'), or null for all types
+ * @param startDate - Start of date range (inclusive)
+ * @param endDate - End of date range (inclusive)
+ */
+export async function getCardioPaceData(
+  type: CardioType | null,
+  startDate: Date | null,
+  endDate: Date | null
+): Promise<CardioPaceDataPoint[]> {
+  // Get all cardio sessions
+  let sessions = await db.cardioSessions.toArray();
+
+  // Filter by type if specified
+  if (type) {
+    sessions = sessions.filter((s) => s.type === type);
+  }
+
+  // Filter to sessions with both distance and duration
+  sessions = sessions.filter(
+    (s) => s.distance !== undefined && s.distance > 0 && s.duration > 0
+  );
+
+  if (sessions.length === 0) {
+    return [];
+  }
+
+  // Apply date filters and build data points
+  const dataPoints: CardioPaceDataPoint[] = [];
+
+  for (const session of sessions) {
+    const sessionDate = new Date(session.date);
+
+    // Apply date filters
+    if (startDate && sessionDate < startDate) continue;
+    if (endDate && sessionDate > endDate) continue;
+
+    // Calculate pace and speed
+    const durationMinutes = session.duration / 60;
+    const distanceMiles = session.distance!;
+
+    // Speed in mph
+    const speed = distanceMiles / (durationMinutes / 60);
+
+    // Pace in minutes per mile
+    const pace = durationMinutes / distanceMiles;
+
+    dataPoints.push({
+      date: sessionDate,
+      pace,
+      speed,
+      sessionId: session.id,
+      type: session.type,
+    });
+  }
+
+  // Sort by date ascending
+  dataPoints.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  return dataPoints;
+}
