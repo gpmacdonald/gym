@@ -401,3 +401,74 @@ export async function getCardioPaceData(
 
   return dataPoints;
 }
+
+export interface CardioIntensityDataPoint {
+  date: Date;
+  avgIncline?: number; // percentage (treadmill only)
+  maxIncline?: number; // percentage (treadmill only)
+  avgResistance?: number; // 1-20 scale (bike only)
+  avgCadence?: number; // RPM (bike only)
+  sessionId: string;
+  type: CardioType;
+}
+
+/**
+ * Get cardio intensity data over a time range.
+ * Returns incline data for treadmill, resistance/cadence for bike.
+ *
+ * @param type - Filter by cardio type ('treadmill', 'stationary-bike'), or null for all types
+ * @param startDate - Start of date range (inclusive)
+ * @param endDate - End of date range (inclusive)
+ */
+export async function getCardioIntensityData(
+  type: CardioType | null,
+  startDate: Date | null,
+  endDate: Date | null
+): Promise<CardioIntensityDataPoint[]> {
+  // Get all cardio sessions
+  let sessions = await db.cardioSessions.toArray();
+
+  // Filter by type if specified
+  if (type) {
+    sessions = sessions.filter((s) => s.type === type);
+  }
+
+  // Filter to sessions with intensity data
+  sessions = sessions.filter((s) => {
+    if (s.type === 'treadmill') {
+      return s.avgIncline !== undefined || s.maxIncline !== undefined;
+    } else {
+      return s.avgResistance !== undefined || s.avgCadence !== undefined;
+    }
+  });
+
+  if (sessions.length === 0) {
+    return [];
+  }
+
+  // Apply date filters and build data points
+  const dataPoints: CardioIntensityDataPoint[] = [];
+
+  for (const session of sessions) {
+    const sessionDate = new Date(session.date);
+
+    // Apply date filters
+    if (startDate && sessionDate < startDate) continue;
+    if (endDate && sessionDate > endDate) continue;
+
+    dataPoints.push({
+      date: sessionDate,
+      avgIncline: session.avgIncline,
+      maxIncline: session.maxIncline,
+      avgResistance: session.avgResistance,
+      avgCadence: session.avgCadence,
+      sessionId: session.id,
+      type: session.type,
+    });
+  }
+
+  // Sort by date ascending
+  dataPoints.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  return dataPoints;
+}

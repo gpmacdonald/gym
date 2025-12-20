@@ -11,6 +11,7 @@ import {
   CardioDistanceChart,
   CardioDurationChart,
   CardioPaceChart,
+  CardioIntensityChart,
   getStartDateForRange,
   type TimeRange,
   type CardioFilter,
@@ -18,7 +19,7 @@ import {
 
 type ViewType = 'weights' | 'cardio';
 type WeightsChartType = 'weight' | 'volume';
-type CardioChartType = 'distance' | 'duration' | 'pace';
+type CardioChartType = 'distance' | 'duration' | 'pace' | 'intensity';
 
 export default function Progress() {
   const [view, setView] = useState<ViewType>('weights');
@@ -142,6 +143,17 @@ export default function Progress() {
             >
               Pace
             </button>
+            <button
+              type="button"
+              onClick={() => setCardioChartType('intensity')}
+              className={`flex-1 py-2 text-sm font-medium rounded-md transition ${
+                cardioChartType === 'intensity'
+                  ? 'bg-orange-500 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              }`}
+            >
+              Intensity
+            </button>
           </div>
         )}
 
@@ -173,8 +185,14 @@ export default function Progress() {
               startDate={startDate}
               endDate={endDate}
             />
-          ) : (
+          ) : cardioChartType === 'pace' ? (
             <CardioPaceChart
+              cardioType={cardioFilter === 'all' ? null : cardioFilter}
+              startDate={startDate}
+              endDate={endDate}
+            />
+          ) : (
+            <CardioIntensityChart
               cardioType={cardioFilter === 'all' ? null : cardioFilter}
               startDate={startDate}
               endDate={endDate}

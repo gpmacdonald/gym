@@ -21,3 +21,5 @@ export { default as CardioDistanceChart } from './CardioDistanceChart';
 export { default as CardioDurationChart } from './CardioDurationChart';
 
 export { default as CardioPaceChart } from './CardioPaceChart';
+
+export { default as CardioIntensityChart } from './CardioIntensityChart';

@@ -20,7 +20,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-32 COMPLETE** | **Next: Task 33 - Cardio Intensity Chart**
+**Tasks 1-33 COMPLETE** | **Next: Task 34 - Summary Statistics Component**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
@@ -31,6 +31,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 | 30 | PR Detection & Display | 3bf7b77 |
 | 31 | Cardio Distance Chart | 6f89faa |
 | 32 | Cardio Duration & Pace Charts | f074f8f |
+| 33 | Cardio Intensity Chart | pending |
 
 ## Project Structure
 
@@ -40,7 +41,7 @@ C:\Users\Geoff\gym/
 │   ├── components/
 │   │   ├── cardio/           # CardioTypeSelector, TreadmillForm, BikeForm, CardioLogger, CardioCard
 │   │   ├── layout/           # Header, BottomNav
-│   │   ├── progress/         # TimeRangeTabs, ExerciseDropdown, CardioTypeDropdown, BaseChart, WeightProgressChart, VolumeChart, CardioDistanceChart, CardioDurationChart, CardioPaceChart, PRBadge, PRList
+│   │   ├── progress/         # TimeRangeTabs, ExerciseDropdown, CardioTypeDropdown, BaseChart, WeightProgressChart, VolumeChart, CardioDistanceChart, CardioDurationChart, CardioPaceChart, CardioIntensityChart, PRBadge, PRList
 │   │   ├── settings/         # DataExport, DataImport
 │   │   └── workout/          # ExerciseSelector, SetInput, WorkoutLogger, WorkoutCard, ActivityList
 │   ├── lib/
@@ -74,7 +75,7 @@ C:\Users\Geoff\gym/
 
 ### Progress Visualization
 - Weights view: Weight & Volume charts with exercise filter
-- Cardio view: Distance, Duration, & Pace charts with type filter
+- Cardio view: Distance, Duration, Pace, & Intensity charts with type filter
 - Exercise dropdown with recent exercises first
 - Time range selector (1M, 3M, 6M, 1Y, All)
 - Weight progress line chart with PR highlighting
@@ -114,15 +115,15 @@ import { exportAllData, downloadAsJson } from '../lib/dataExport';
 import { validateImportFile, importData } from '../lib/dataImport';
 ```
 
-## Next Task: Task 33 - Cardio Intensity Chart
+## Next Task: Task 34 - Summary Statistics Component
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2712. This task involves:
-1. Add to progressQueries.ts:
-   - `getCardioIntensityData(type, startDate, endDate)` - returns incline for treadmill, resistance for bike
-2. Create CardioIntensityChart component:
-   - Shows avg incline for treadmill sessions
-   - Shows avg resistance for bike sessions
-3. Add "Intensity" option to cardio chart selector
+Reference `TASK-CHECKLIST-FULL.md` around line 2737. This task involves:
+1. Create `src/lib/statsQueries.ts` with stats calculations:
+   - totalWorkouts, totalCardioSessions, totalVolume
+   - totalCardioTime, totalCardioDistance
+   - workoutsPerWeek (average), mostTrainedMuscle
+2. Create SummaryStats component to display these stats
+3. Replace the cardio stats placeholders with real data
 
 ## Verification Before Starting
 
