@@ -31,7 +31,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 | 30 | PR Detection & Display | 3bf7b77 |
 | 31 | Cardio Distance Chart | 6f89faa |
 | 32 | Cardio Duration & Pace Charts | f074f8f |
-| 33 | Cardio Intensity Chart | pending |
+| 33 | Cardio Intensity Chart | f8cba4f |
 
 ## Project Structure
 
