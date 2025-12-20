@@ -16,24 +16,18 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 ### Key Documents to Review
 1. `prd-improved.md` - Product requirements
 2. `agentic-guidelines.md` - Development guidelines  
-3. `TASK-CHECKLIST-FULL.md` - Full task breakdown (Task 29 starts at line ~2596)
+3. `TASK-CHECKLIST-FULL.md` - Full task breakdown
 
 ## Current Status
 
-**Phase 3 COMPLETE (Tasks 1-35)** | **Next: Task 36 - PWA Manifest (Phase 4)**
+**Tasks 1-38 COMPLETE** | **Next: Task 39 - Dark Mode Implementation**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
 |------|-------------|--------|
-| 27 | Recharts Setup & Base Chart | f7b8cf3 |
-| 28 | Weight Progress Chart | 0108893 |
-| 29 | Volume Chart | 4e5f007 |
-| 30 | PR Detection & Display | 3bf7b77 |
-| 31 | Cardio Distance Chart | 6f89faa |
-| 32 | Cardio Duration & Pace Charts | f074f8f |
-| 33 | Cardio Intensity Chart | f8cba4f |
-| 34 | Summary Statistics Component | 2f21e91 |
-| 35 | Progress Page Integration | 190ab6e |
+| 36 | PWA Manifest | 0ddd052 |
+| 37 | Service Worker Setup | dad71ae |
+| 38 | Install Prompt | c8327b9 |
 
 ## Project Structure
 
@@ -42,7 +36,7 @@ C:\Users\Geoff\gym/
 ├── src/
 │   ├── components/
 │   │   ├── cardio/           # CardioTypeSelector, TreadmillForm, BikeForm, CardioLogger, CardioCard
-│   │   ├── layout/           # Header, BottomNav
+│   │   ├── layout/           # Header, BottomNav, AppShell, OfflineIndicator, InstallPrompt
 │   │   ├── progress/         # TimeRangeTabs, ExerciseDropdown, CardioTypeDropdown, BaseChart, WeightProgressChart, VolumeChart, CardioDistanceChart, CardioDurationChart, CardioPaceChart, CardioIntensityChart, PRBadge, PRList
 │   │   ├── settings/         # DataExport, DataImport
 │   │   └── workout/          # ExerciseSelector, SetInput, WorkoutLogger, WorkoutCard, ActivityList
@@ -54,6 +48,7 @@ C:\Users\Geoff\gym/
 │   │   ├── utils.ts          # formatDuration, formatDate utilities
 │   │   ├── chartUtils.ts     # Chart formatting and colors
 │   │   ├── progressQueries.ts # Weight progress data queries
+│   │   ├── pwa.ts            # PWA hooks (useOnlineStatus, useIsPWA, useInstallPrompt)
 │   │   ├── dataExport.ts     # JSON export functionality
 │   │   ├── dataImport.ts     # JSON import with validation
 │   │   └── __tests__/        # Tests for lib modules
@@ -66,6 +61,9 @@ C:\Users\Geoff\gym/
 │   │   └── settingsStore.ts  # Zustand settings store
 │   └── types/
 │       └── index.ts          # All TypeScript interfaces
+├── public/
+│   └── icons/                # PWA icons (192x192, 512x512, apple-touch-icon)
+└── vite.config.ts            # Includes vite-plugin-pwa configuration
 ```
 
 ## Key Features Implemented
@@ -90,7 +88,22 @@ C:\Users\Geoff\gym/
 - Import with validation (merge or replace mode)
 - Mock data seeding for testing (~60 workouts, ~30 cardio over 3 months)
 
+### PWA Features (NEW)
+- Web app manifest with icons
+- Service worker with precaching (works offline)
+- Offline indicator banner
+- Install prompt (shows after first workout, iOS-specific instructions)
+
 ## Important Technical Details
+
+### PWA Hooks
+```typescript
+import { useOnlineStatus, useIsPWA, useInstallPrompt } from '../lib/pwa';
+
+const isOnline = useOnlineStatus();
+const isPWA = useIsPWA();
+const { shouldShowPrompt, promptInstall, dismissPrompt, markFirstWorkoutComplete } = useInstallPrompt();
+```
 
 ### Weight System
 - Barbell: User enters per-side weight, total = (weight × 2) + barbell
@@ -111,27 +124,21 @@ await seedMockData();  // Creates 3 months of realistic data
 await clearMockData(); // Clears workout data, keeps exercises
 ```
 
-### Data Export/Import
-```typescript
-import { exportAllData, downloadAsJson } from '../lib/dataExport';
-import { validateImportFile, importData } from '../lib/dataImport';
-```
+## Next Task: Task 39 - Dark Mode Implementation
 
-## Next Task: Task 36 - PWA Manifest (Phase 4)
-
-Reference `TASK-CHECKLIST-FULL.md` around line 2827. Phase 4 is PWA & Polish:
-1. Task 36: PWA Manifest - Create manifest, configure Vite PWA plugin
-2. Task 37: Service Worker Setup - Workbox for precaching, offline fallback
-3. Task 38: Install Prompt - Custom install prompt component
-4. Task 39: Dark Mode Implementation - Theme toggle in settings
-5. Task 40: Rest Timer Component - Countdown timer with presets
+Reference `TASK-CHECKLIST-FULL.md` around line 2844. Remaining Phase 4 tasks:
+1. Task 39: Dark Mode Implementation - Theme toggle in settings
+2. Task 40: Rest Timer Component - Countdown timer with presets
+3. Task 41: Edit Workout Functionality
+4. Task 42: Delete Workout Functionality
+5. Task 43: Workout Notes
 
 ## Verification Before Starting
 
 ```powershell
-npm test                    # All tests should pass
+npm test                    # All 421 tests should pass
 npm run lint               # Should pass (warnings ok)
-npm run build              # Should build successfully
+npm run build              # Should build successfully with PWA
 ```
 
 ## Known Gotchas
@@ -141,6 +148,7 @@ npm run build              # Should build successfully
 3. **Dexie booleans**: Use `filter()` not `where().equals()` for booleans
 4. **Recharts in tests**: ResponsiveContainer needs width/height - check for `.recharts-responsive-container` class
 5. **Windows paths**: Use PowerShell, backslashes in paths
+6. **PWA hooks in tests**: Mock `../lib/pwa` module to avoid localStorage issues
 
 ## User Preferences
 
