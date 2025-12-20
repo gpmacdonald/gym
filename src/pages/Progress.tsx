@@ -1,26 +1,69 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect, useCallback, lazy, Suspense } from 'react';
 import { Dumbbell, Heart } from 'lucide-react';
 import { Header } from '../components/layout';
 import {
   TimeRangeTabs,
   ExerciseDropdown,
   CardioTypeDropdown,
-  WeightProgressChart,
-  VolumeChart,
-  PRList,
-  CardioDistanceChart,
-  CardioDurationChart,
-  CardioPaceChart,
-  CardioIntensityChart,
-  CardioSummaryStats,
   getStartDateForRange,
   type TimeRange,
   type CardioFilter,
 } from '../components/progress';
 
+// Lazy load chart components for better initial load performance
+const WeightProgressChart = lazy(
+  () => import('../components/progress/WeightProgressChart')
+);
+const VolumeChart = lazy(() => import('../components/progress/VolumeChart'));
+const PRList = lazy(() => import('../components/progress/PRList'));
+const CardioDistanceChart = lazy(
+  () => import('../components/progress/CardioDistanceChart')
+);
+const CardioDurationChart = lazy(
+  () => import('../components/progress/CardioDurationChart')
+);
+const CardioPaceChart = lazy(
+  () => import('../components/progress/CardioPaceChart')
+);
+const CardioIntensityChart = lazy(
+  () => import('../components/progress/CardioIntensityChart')
+);
+const CardioSummaryStats = lazy(
+  () => import('../components/progress/CardioSummaryStats')
+);
+
 type ViewType = 'weights' | 'cardio';
 type WeightsChartType = 'weight' | 'volume';
 type CardioChartType = 'distance' | 'duration' | 'pace' | 'intensity';
+
+// Loading placeholder for charts
+function ChartLoadingPlaceholder() {
+  return (
+    <div className="h-64 flex items-center justify-center">
+      <div className="animate-pulse flex flex-col items-center gap-2">
+        <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full" />
+        <div className="w-24 h-4 bg-gray-200 dark:bg-gray-700 rounded" />
+      </div>
+    </div>
+  );
+}
+
+// Loading placeholder for stats grid
+function StatsLoadingPlaceholder() {
+  return (
+    <div className="grid grid-cols-2 gap-3">
+      {[1, 2, 3, 4].map((i) => (
+        <div
+          key={i}
+          className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 animate-pulse"
+        >
+          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-2" />
+          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-16" />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function Progress() {
   const [view, setView] = useState<ViewType>('weights');
@@ -31,9 +74,36 @@ export default function Progress() {
   const [timeRange, setTimeRange] = useState<TimeRange>('3M');
   const [selectedExercise, setSelectedExercise] = useState<string | null>(null);
   const [cardioFilter, setCardioFilter] = useState<CardioFilter>('all');
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const startDate = getStartDateForRange(timeRange);
-  const endDate = new Date();
+  // Memoize date calculations to prevent unnecessary recalculations
+  const startDate = useMemo(
+    () => getStartDateForRange(timeRange),
+    [timeRange]
+  );
+  // endDate updates when refreshKey changes (on visibility change)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const endDate = useMemo(() => new Date(), [refreshKey]);
+
+  // Refresh data when page becomes visible again
+  const handleVisibilityChange = useCallback(() => {
+    if (document.visibilityState === 'visible') {
+      setRefreshKey((prev) => prev + 1);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [handleVisibilityChange]);
+
+  // Memoize cardio type conversion
+  const cardioType = useMemo(
+    () => (cardioFilter === 'all' ? null : cardioFilter),
+    [cardioFilter]
+  );
 
   return (
     <>
@@ -160,45 +230,53 @@ export default function Progress() {
 
         {/* Chart */}
         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-          {view === 'weights' ? (
-            weightsChartType === 'weight' ? (
-              <WeightProgressChart
-                exerciseId={selectedExercise}
+          <Suspense fallback={<ChartLoadingPlaceholder />}>
+            {view === 'weights' ? (
+              weightsChartType === 'weight' ? (
+                <WeightProgressChart
+                  key={`weight-${refreshKey}`}
+                  exerciseId={selectedExercise}
+                  startDate={startDate}
+                  endDate={endDate}
+                />
+              ) : (
+                <VolumeChart
+                  key={`volume-${refreshKey}`}
+                  exerciseId={selectedExercise}
+                  startDate={startDate}
+                  endDate={endDate}
+                />
+              )
+            ) : cardioChartType === 'distance' ? (
+              <CardioDistanceChart
+                key={`distance-${refreshKey}`}
+                cardioType={cardioType}
+                startDate={startDate}
+                endDate={endDate}
+              />
+            ) : cardioChartType === 'duration' ? (
+              <CardioDurationChart
+                key={`duration-${refreshKey}`}
+                cardioType={cardioType}
+                startDate={startDate}
+                endDate={endDate}
+              />
+            ) : cardioChartType === 'pace' ? (
+              <CardioPaceChart
+                key={`pace-${refreshKey}`}
+                cardioType={cardioType}
                 startDate={startDate}
                 endDate={endDate}
               />
             ) : (
-              <VolumeChart
-                exerciseId={selectedExercise}
+              <CardioIntensityChart
+                key={`intensity-${refreshKey}`}
+                cardioType={cardioType}
                 startDate={startDate}
                 endDate={endDate}
               />
-            )
-          ) : cardioChartType === 'distance' ? (
-            <CardioDistanceChart
-              cardioType={cardioFilter === 'all' ? null : cardioFilter}
-              startDate={startDate}
-              endDate={endDate}
-            />
-          ) : cardioChartType === 'duration' ? (
-            <CardioDurationChart
-              cardioType={cardioFilter === 'all' ? null : cardioFilter}
-              startDate={startDate}
-              endDate={endDate}
-            />
-          ) : cardioChartType === 'pace' ? (
-            <CardioPaceChart
-              cardioType={cardioFilter === 'all' ? null : cardioFilter}
-              startDate={startDate}
-              endDate={endDate}
-            />
-          ) : (
-            <CardioIntensityChart
-              cardioType={cardioFilter === 'all' ? null : cardioFilter}
-              startDate={startDate}
-              endDate={endDate}
-            />
-          )}
+            )}
+          </Suspense>
         </div>
 
         {/* Personal Records Section (Weights view only) */}
@@ -207,17 +285,22 @@ export default function Progress() {
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
               Personal Records
             </h3>
-            <PRList limit={5} />
+            <Suspense fallback={<ChartLoadingPlaceholder />}>
+              <PRList key={`pr-${refreshKey}`} limit={5} />
+            </Suspense>
           </div>
         )}
 
         {/* Cardio Summary Stats */}
         {view === 'cardio' && (
-          <CardioSummaryStats
-            cardioType={cardioFilter === 'all' ? null : cardioFilter}
-            startDate={startDate}
-            endDate={endDate}
-          />
+          <Suspense fallback={<StatsLoadingPlaceholder />}>
+            <CardioSummaryStats
+              key={`stats-${refreshKey}`}
+              cardioType={cardioType}
+              startDate={startDate}
+              endDate={endDate}
+            />
+          </Suspense>
         )}
       </div>
     </>
