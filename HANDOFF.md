@@ -20,7 +20,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-34 COMPLETE** | **Next: Task 35 - Exercise Library (CRUD)**
+**Phase 3 COMPLETE (Tasks 1-35)** | **Next: Task 36 - PWA Manifest (Phase 4)**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
@@ -33,6 +33,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 | 32 | Cardio Duration & Pace Charts | f074f8f |
 | 33 | Cardio Intensity Chart | f8cba4f |
 | 34 | Summary Statistics Component | 2f21e91 |
+| 35 | Progress Page Integration | 190ab6e |
 
 ## Project Structure
 
@@ -116,14 +117,14 @@ import { exportAllData, downloadAsJson } from '../lib/dataExport';
 import { validateImportFile, importData } from '../lib/dataImport';
 ```
 
-## Next Task: Task 35 - Exercise Library (CRUD)
+## Next Task: Task 36 - PWA Manifest (Phase 4)
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2596. This task involves:
-1. Exercise list view with search/filter
-2. Add new custom exercise form
-3. Edit existing exercise details
-4. Delete exercise (with confirmation)
-5. Filter exercises by muscle group
+Reference `TASK-CHECKLIST-FULL.md` around line 2827. Phase 4 is PWA & Polish:
+1. Task 36: PWA Manifest - Create manifest, configure Vite PWA plugin
+2. Task 37: Service Worker Setup - Workbox for precaching, offline fallback
+3. Task 38: Install Prompt - Custom install prompt component
+4. Task 39: Dark Mode Implementation - Theme toggle in settings
+5. Task 40: Rest Timer Component - Countdown timer with presets
 
 ## Verification Before Starting
 
