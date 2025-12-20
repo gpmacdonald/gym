@@ -32,7 +32,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 | 31 | Cardio Distance Chart | 6f89faa |
 | 32 | Cardio Duration & Pace Charts | f074f8f |
 | 33 | Cardio Intensity Chart | f8cba4f |
-| 34 | Summary Statistics Component | pending |
+| 34 | Summary Statistics Component | 2f21e91 |
 
 ## Project Structure
 
@@ -116,14 +116,14 @@ import { exportAllData, downloadAsJson } from '../lib/dataExport';
 import { validateImportFile, importData } from '../lib/dataImport';
 ```
 
-## Next Task: Task 35 - Progress Page Integration
+## Next Task: Task 35 - Exercise Library (CRUD)
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2779. This task involves:
-1. Connect view toggle to show correct charts (already done)
-2. Connect exercise/cardio selectors to charts (already done)
-3. Add lazy loading for chart components
-4. Performance optimization (memoization)
-5. Add refresh functionality when returning to page
+Reference `TASK-CHECKLIST-FULL.md` around line 2596. This task involves:
+1. Exercise list view with search/filter
+2. Add new custom exercise form
+3. Edit existing exercise details
+4. Delete exercise (with confirmation)
+5. Filter exercises by muscle group
 
 ## Verification Before Starting
 
