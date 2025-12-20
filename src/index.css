@@ -23,6 +23,21 @@
   --color-warning: #eab308; /* yellow-500 */
   --color-error: #ef4444; /* red-500 */
   --color-info: #3b82f6; /* blue-500 */
+
+  /* Animation durations */
+  --animate-slide-up: slide-up 0.3s ease-out;
+}
+
+/* Animations */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Base styles */

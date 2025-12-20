@@ -38,6 +38,13 @@ vi.mock('../../../stores', () => ({
   }),
 }));
 
+// Mock the PWA module
+vi.mock('../../../lib/pwa', () => ({
+  useInstallPrompt: () => ({
+    markFirstWorkoutComplete: vi.fn(),
+  }),
+}));
+
 describe('WorkoutLogger', () => {
   const mockOnComplete = vi.fn();
   const mockOnCancel = vi.fn();

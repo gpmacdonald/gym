@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Plus, Save, X } from 'lucide-react';
 import type { Exercise } from '../../types';
 import { addWorkout, addSet } from '../../lib/queries';
+import { useInstallPrompt } from '../../lib/pwa';
 import ExerciseSelector from './ExerciseSelector';
 import SetInput from './SetInput';
 import WorkoutExerciseCard from './WorkoutExerciseCard';
@@ -28,6 +29,7 @@ export default function WorkoutLogger({ onComplete, onCancel }: WorkoutLoggerPro
   const [activeExerciseIndex, setActiveExerciseIndex] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [notes, setNotes] = useState('');
+  const { markFirstWorkoutComplete } = useInstallPrompt();
 
   const recentExerciseIds = exercises.map((e) => e.exercise.id);
 
@@ -113,6 +115,9 @@ export default function WorkoutLogger({ onComplete, onCancel }: WorkoutLoggerPro
           });
         }
       }
+
+      // Mark first workout complete for install prompt
+      markFirstWorkoutComplete();
 
       onComplete();
     } catch (error) {

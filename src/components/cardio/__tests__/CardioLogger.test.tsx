@@ -15,6 +15,13 @@ vi.mock('../../../stores', () => ({
   }),
 }));
 
+// Mock the PWA module
+vi.mock('../../../lib/pwa', () => ({
+  useInstallPrompt: () => ({
+    markFirstWorkoutComplete: vi.fn(),
+  }),
+}));
+
 describe('CardioLogger', () => {
   beforeEach(() => {
     vi.clearAllMocks();

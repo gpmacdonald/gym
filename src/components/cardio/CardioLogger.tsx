@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CardioType } from '../../types';
 import { addCardioSession } from '../../lib/queries';
+import { useInstallPrompt } from '../../lib/pwa';
 import CardioTypeSelector from './CardioTypeSelector';
 import TreadmillForm from './TreadmillForm';
 import BikeForm from './BikeForm';
@@ -15,6 +16,7 @@ interface CardioLoggerProps {
 export default function CardioLogger({ onComplete, onCancel }: CardioLoggerProps) {
   const [cardioType, setCardioType] = useState<CardioType | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const { markFirstWorkoutComplete } = useInstallPrompt();
 
   const handleSave = async (data: TreadmillData | BikeData) => {
     if (!cardioType) return;
@@ -26,6 +28,8 @@ export default function CardioLogger({ onComplete, onCancel }: CardioLoggerProps
         date: new Date(),
         ...data,
       });
+      // Mark first workout complete for install prompt
+      markFirstWorkoutComplete();
       onComplete();
     } catch (error) {
       console.error('Failed to save cardio session:', error);

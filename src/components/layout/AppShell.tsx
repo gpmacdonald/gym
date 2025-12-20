@@ -1,5 +1,6 @@
 import BottomNav from './BottomNav';
 import OfflineIndicator from './OfflineIndicator';
+import InstallPrompt from './InstallPrompt';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -11,6 +12,7 @@ export default function AppShell({ children }: AppShellProps) {
       <OfflineIndicator />
       <main className="pb-20">{children}</main>
       <BottomNav />
+      <InstallPrompt />
     </div>
   );
 }
