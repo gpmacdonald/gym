@@ -20,12 +20,13 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-44 COMPLETE** | **Next: Task 45 - Settings Page Completion**
+**Tasks 1-45 COMPLETE (Phase 4 Done!)** | **Next: Task 46 - Bundle Size Optimization**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
 |------|-------------|--------|
 | 44 | Exercise Management Page | 20acd92 |
+| 45 | Settings Page Completion | dbac4e7 |
 
 ### Previously Completed
 | Task | Description | Commit |
@@ -45,7 +46,7 @@ C:\Users\Geoff\gym/
 │   │   ├── exercises/        # ExerciseList, ExerciseModal
 │   │   ├── layout/           # Header, BottomNav, AppShell, OfflineIndicator, InstallPrompt
 │   │   ├── progress/         # TimeRangeTabs, ExerciseDropdown, CardioTypeDropdown, BaseChart, WeightProgressChart, VolumeChart, CardioDistanceChart, CardioDurationChart, CardioPaceChart, CardioIntensityChart, PRBadge, PRList
-│   │   ├── settings/         # DataExport, DataImport
+│   │   ├── settings/         # DataExport, DataImport, ThemeToggle, MockDataManager, AppInfo
 │   │   └── workout/          # ExerciseSelector, SetInput, WorkoutLogger, WorkoutCard, ActivityList
 │   ├── lib/
 │   │   ├── db.ts             # Dexie database setup
@@ -140,15 +141,17 @@ await seedMockData();  // Creates 3 months of realistic data
 await clearMockData(); // Clears workout data, keeps exercises
 ```
 
-## Next Task: Task 45 - Settings Page Completion
+## Next Task: Task 46 - Bundle Size Optimization
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2881. Remaining Phase 4 tasks:
-1. Task 45: Settings Page Completion - All settings accessible, data management, version display
+Reference `TASK-CHECKLIST-FULL.md` around line 2891. Phase 5 tasks:
+1. Task 46: Bundle Size Optimization - Analyze and reduce bundle, code splitting, target < 200KB gzipped
+2. Task 47: Runtime Performance
+3. Task 48: Accessibility Audit
 
 ## Verification Before Starting
 
 ```powershell
-npm test                    # All 501 tests should pass
+npm test                    # All 513 tests should pass
 npm run lint               # Should pass (warnings ok)
 npm run build              # Should build successfully with PWA
 ```
