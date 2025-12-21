@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Plus, Save, X } from 'lucide-react';
+import { Plus, Save, X, Timer } from 'lucide-react';
 import type { Exercise } from '../../types';
 import { addWorkout, addSet } from '../../lib/queries';
 import { useInstallPrompt } from '../../lib/pwa';
 import ExerciseSelector from './ExerciseSelector';
 import SetInput from './SetInput';
 import WorkoutExerciseCard from './WorkoutExerciseCard';
+import RestTimer from './RestTimer';
 
 interface SetData {
   reps: number;
@@ -29,6 +30,8 @@ export default function WorkoutLogger({ onComplete, onCancel }: WorkoutLoggerPro
   const [activeExerciseIndex, setActiveExerciseIndex] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [notes, setNotes] = useState('');
+  const [showTimer, setShowTimer] = useState(false);
+  const [timerKey, setTimerKey] = useState(0); // Used to reset timer on new set
   const { markFirstWorkoutComplete } = useInstallPrompt();
 
   const recentExerciseIds = exercises.map((e) => e.exercise.id);
@@ -62,6 +65,10 @@ export default function WorkoutLogger({ onComplete, onCancel }: WorkoutLoggerPro
       };
       return updated;
     });
+
+    // Show and auto-start rest timer
+    setShowTimer(true);
+    setTimerKey((prev) => prev + 1);
   };
 
   const handleRemoveSet = (exerciseIndex: number, setIndex: number) => {
@@ -168,16 +175,38 @@ export default function WorkoutLogger({ onComplete, onCancel }: WorkoutLoggerPro
         >
           Cancel
         </button>
-        <button
-          type="button"
-          onClick={handleSaveWorkout}
-          disabled={!canSave || isSaving}
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Save className="w-4 h-4" />
-          {isSaving ? 'Saving...' : 'Save Workout'}
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Timer toggle button */}
+          {exercises.length > 0 && !showTimer && (
+            <button
+              type="button"
+              onClick={() => setShowTimer(true)}
+              className="flex items-center gap-1 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
+              aria-label="Show rest timer"
+            >
+              <Timer className="w-4 h-4" />
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={handleSaveWorkout}
+            disabled={!canSave || isSaving}
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Save className="w-4 h-4" />
+            {isSaving ? 'Saving...' : 'Save Workout'}
+          </button>
+        </div>
       </div>
+
+      {/* Rest Timer */}
+      {showTimer && (
+        <RestTimer
+          key={timerKey}
+          autoStart={timerKey > 0}
+          onClose={() => setShowTimer(false)}
+        />
+      )}
 
       {/* Add Exercise Button */}
       <button
