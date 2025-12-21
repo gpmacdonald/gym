@@ -20,13 +20,14 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-45 COMPLETE (Phase 4 Done!)** | **Next: Task 46 - Bundle Size Optimization**
+**Tasks 1-46 COMPLETE** | **Next: Task 47 - Runtime Performance**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
 |------|-------------|--------|
 | 44 | Exercise Management Page | 20acd92 |
 | 45 | Settings Page Completion | dbac4e7 |
+| 46 | Bundle Size Optimization | aed620b |
 
 ### Previously Completed
 | Task | Description | Commit |
@@ -141,12 +142,12 @@ await seedMockData();  // Creates 3 months of realistic data
 await clearMockData(); // Clears workout data, keeps exercises
 ```
 
-## Next Task: Task 46 - Bundle Size Optimization
+## Next Task: Task 47 - Runtime Performance
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2891. Phase 5 tasks:
-1. Task 46: Bundle Size Optimization - Analyze and reduce bundle, code splitting, target < 200KB gzipped
-2. Task 47: Runtime Performance
-3. Task 48: Accessibility Audit
+Reference `TASK-CHECKLIST-FULL.md` around line 2897. Phase 5 tasks:
+1. Task 47: Runtime Performance - Profile and fix re-renders, virtualize long lists, debounce inputs
+2. Task 48: Accessibility Audit
+3. Task 49: iOS Safari Testing
 
 ## Verification Before Starting
 
