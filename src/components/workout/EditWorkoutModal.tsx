@@ -195,7 +195,7 @@ export default function EditWorkoutModal({
                                 parseFloat(e.target.value) || 0
                               )
                             }
-                            className="w-16 px-2 py-1 text-center bg-gray-100 dark:bg-gray-600 border-0 rounded text-gray-900 dark:text-white"
+                            className="w-16 px-2 py-1 text-base text-center bg-gray-100 dark:bg-gray-600 border-0 rounded text-gray-900 dark:text-white"
                             min="0"
                             step="0.5"
                           />
@@ -218,7 +218,8 @@ export default function EditWorkoutModal({
                                 Math.max(1, set.reps - 1)
                               )
                             }
-                            className="p-1 rounded bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400"
+                            className="p-1 rounded bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 min-w-[28px] min-h-[28px] flex items-center justify-center"
+                            aria-label="Decrease reps"
                           >
                             <Minus className="w-3 h-3" />
                           </button>
@@ -232,7 +233,7 @@ export default function EditWorkoutModal({
                                 parseInt(e.target.value) || 1
                               )
                             }
-                            className="w-12 px-2 py-1 text-center bg-gray-100 dark:bg-gray-600 border-0 rounded text-gray-900 dark:text-white"
+                            className="w-12 px-2 py-1 text-base text-center bg-gray-100 dark:bg-gray-600 border-0 rounded text-gray-900 dark:text-white"
                             min="1"
                           />
                           <button
@@ -240,7 +241,8 @@ export default function EditWorkoutModal({
                             onClick={() =>
                               handleSetChange(set.id, 'reps', set.reps + 1)
                             }
-                            className="p-1 rounded bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400"
+                            className="p-1 rounded bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 min-w-[28px] min-h-[28px] flex items-center justify-center"
+                            aria-label="Increase reps"
                           >
                             <Plus className="w-3 h-3" />
                           </button>
@@ -263,7 +265,7 @@ export default function EditWorkoutModal({
                             )
                           }
                           placeholder="RPE"
-                          className="w-full px-2 py-1 text-center bg-gray-100 dark:bg-gray-600 border-0 rounded text-gray-900 dark:text-white placeholder-gray-400"
+                          className="w-full px-2 py-1 text-base text-center bg-gray-100 dark:bg-gray-600 border-0 rounded text-gray-900 dark:text-white placeholder-gray-400"
                           min="1"
                           max="10"
                         />
@@ -273,7 +275,7 @@ export default function EditWorkoutModal({
                       <button
                         type="button"
                         onClick={() => handleDeleteSet(set.id)}
-                        className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
+                        className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded min-w-[32px] min-h-[32px] flex items-center justify-center"
                         aria-label="Delete set"
                       >
                         <Trash2 className="w-4 h-4" />
