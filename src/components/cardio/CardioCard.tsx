@@ -58,9 +58,10 @@ export default function CardioCard({ session, onDelete }: CardioCardProps) {
               <button
                 type="button"
                 onClick={handleDeleteClick}
-                className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                className="flex items-center gap-1 px-3 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors min-h-[44px]"
+                aria-label="Delete cardio session"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="w-4 h-4" aria-hidden="true" />
                 Delete
               </button>
             </div>

@@ -101,9 +101,10 @@ export default function WorkoutCard({
                 <button
                   type="button"
                   onClick={handleEditClick}
-                  className="flex items-center gap-1 px-3 py-1.5 text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                  className="flex items-center gap-1 px-3 py-2 text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors min-h-[44px]"
+                  aria-label="Edit workout"
                 >
-                  <Pencil className="w-4 h-4" />
+                  <Pencil className="w-4 h-4" aria-hidden="true" />
                   Edit
                 </button>
               )}
@@ -111,9 +112,10 @@ export default function WorkoutCard({
                 <button
                   type="button"
                   onClick={handleDeleteClick}
-                  className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                  className="flex items-center gap-1 px-3 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors min-h-[44px]"
+                  aria-label="Delete workout"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-4 h-4" aria-hidden="true" />
                   Delete
                 </button>
               )}

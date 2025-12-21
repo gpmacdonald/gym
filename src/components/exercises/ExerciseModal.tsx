@@ -86,17 +86,22 @@ export default function ExerciseModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+    <div
+      className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="exercise-modal-title"
+    >
       <div className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-md overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h2 id="exercise-modal-title" className="text-lg font-semibold text-gray-900 dark:text-white">
             {title}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
