@@ -38,10 +38,11 @@ describe('Routing', () => {
   });
 
   describe('Exercises Page', () => {
-    it('should render exercises page at /exercises', () => {
+    it('should render exercises page at /exercises', async () => {
       renderWithRouter('/exercises');
       expect(screen.getByRole('heading', { name: 'Exercise Library' })).toBeInTheDocument();
-      expect(screen.getByText('Exercise management will go here')).toBeInTheDocument();
+      // ExerciseList is loading or showing content
+      expect(await screen.findByRole('button', { name: 'Add Custom Exercise' })).toBeInTheDocument();
     });
   });
 
