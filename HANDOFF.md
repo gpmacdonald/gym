@@ -20,7 +20,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-38 COMPLETE** | **Next: Task 39 - Dark Mode Implementation**
+**Tasks 1-39 COMPLETE** | **Next: Task 40 - Rest Timer Component**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
@@ -28,6 +28,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 | 36 | PWA Manifest | 0ddd052 |
 | 37 | Service Worker Setup | dad71ae |
 | 38 | Install Prompt | c8327b9 |
+| 39 | Dark Mode Implementation | a517f44 |
 
 ## Project Structure
 
@@ -96,6 +97,15 @@ C:\Users\Geoff\gym/
 
 ## Important Technical Details
 
+### Theme Hook
+```typescript
+import { useTheme } from '../lib/theme';
+
+const { theme, effectiveTheme, isDark, setTheme, toggleTheme } = useTheme();
+// theme: 'light' | 'dark' | 'system'
+// effectiveTheme: 'light' | 'dark' (resolved from system)
+```
+
 ### PWA Hooks
 ```typescript
 import { useOnlineStatus, useIsPWA, useInstallPrompt } from '../lib/pwa';
@@ -124,14 +134,14 @@ await seedMockData();  // Creates 3 months of realistic data
 await clearMockData(); // Clears workout data, keeps exercises
 ```
 
-## Next Task: Task 39 - Dark Mode Implementation
+## Next Task: Task 40 - Rest Timer Component
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2844. Remaining Phase 4 tasks:
-1. Task 39: Dark Mode Implementation - Theme toggle in settings
-2. Task 40: Rest Timer Component - Countdown timer with presets
-3. Task 41: Edit Workout Functionality
-4. Task 42: Delete Workout Functionality
-5. Task 43: Workout Notes
+Reference `TASK-CHECKLIST-FULL.md` around line 2851. Remaining Phase 4 tasks:
+1. Task 40: Rest Timer Component - Countdown timer with presets
+2. Task 41: Edit Workout Functionality
+3. Task 42: Delete Workout Functionality
+4. Task 43: Workout Notes
+5. Task 44: Exercise Management Page
 
 ## Verification Before Starting
 
