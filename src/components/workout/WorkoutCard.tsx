@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Pencil } from 'lucide-react';
+import { ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react';
 import type { Workout, WorkoutSet, Exercise } from '../../types';
 import { useSettingsStore } from '../../stores';
 
@@ -8,6 +8,7 @@ interface WorkoutCardProps {
   sets: WorkoutSet[];
   exercises: Exercise[];
   onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 function formatDate(date: Date): string {
@@ -38,6 +39,7 @@ export default function WorkoutCard({
   sets,
   exercises,
   onEdit,
+  onDelete,
 }: WorkoutCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const { weightUnit } = useSettingsStore();
@@ -45,6 +47,11 @@ export default function WorkoutCard({
   const handleEditClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onEdit?.();
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onDelete?.();
   };
 
   // Group sets by exercise
@@ -87,17 +94,29 @@ export default function WorkoutCard({
 
       {isExpanded && (
         <div className="px-4 pb-4 border-t border-gray-100 dark:border-gray-700">
-          {/* Edit button */}
-          {onEdit && (
-            <div className="flex justify-end mt-2 mb-1">
-              <button
-                type="button"
-                onClick={handleEditClick}
-                className="flex items-center gap-1 px-3 py-1.5 text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors"
-              >
-                <Pencil className="w-4 h-4" />
-                Edit
-              </button>
+          {/* Action buttons */}
+          {(onEdit || onDelete) && (
+            <div className="flex justify-end gap-2 mt-2 mb-1">
+              {onEdit && (
+                <button
+                  type="button"
+                  onClick={handleEditClick}
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                >
+                  <Pencil className="w-4 h-4" />
+                  Edit
+                </button>
+              )}
+              {onDelete && (
+                <button
+                  type="button"
+                  onClick={handleDeleteClick}
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete
+                </button>
+              )}
             </div>
           )}
           {Object.entries(setsByExercise).map(([exerciseId, exerciseSets]) => {

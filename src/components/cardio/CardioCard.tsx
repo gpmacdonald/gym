@@ -1,19 +1,25 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Footprints, Bike } from 'lucide-react';
+import { ChevronDown, ChevronUp, Footprints, Bike, Trash2 } from 'lucide-react';
 import type { CardioSession } from '../../types';
 import { useSettingsStore } from '../../stores';
 import { formatDuration, formatDate } from '../../lib/utils';
 
 interface CardioCardProps {
   session: CardioSession;
+  onDelete?: () => void;
 }
 
-export default function CardioCard({ session }: CardioCardProps) {
+export default function CardioCard({ session, onDelete }: CardioCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const { distanceUnit } = useSettingsStore();
 
   const Icon = session.type === 'treadmill' ? Footprints : Bike;
   const typeName = session.type === 'treadmill' ? 'Treadmill' : 'Stationary Bike';
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onDelete?.();
+  };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
@@ -46,6 +52,19 @@ export default function CardioCard({ session }: CardioCardProps) {
 
       {isExpanded && (
         <div className="px-4 pb-4 border-t border-gray-100 dark:border-gray-700">
+          {/* Delete button */}
+          {onDelete && (
+            <div className="flex justify-end mt-2 mb-1">
+              <button
+                type="button"
+                onClick={handleDeleteClick}
+                className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+              >
+                <Trash2 className="w-4 h-4" />
+                Delete
+              </button>
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-4 mt-3">
             {session.distance !== undefined && (
               <div>

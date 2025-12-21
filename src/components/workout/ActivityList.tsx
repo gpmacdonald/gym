@@ -5,6 +5,8 @@ import {
   getAllCardioSessions,
   getSetsByWorkoutId,
   getAllExercises,
+  deleteWorkout,
+  deleteCardioSession,
 } from '../../lib/queries';
 import type {
   Workout,
@@ -16,6 +18,7 @@ import type {
 import WorkoutCard from './WorkoutCard';
 import EditWorkoutModal from './EditWorkoutModal';
 import { CardioCard } from '../cardio';
+import { ConfirmDialog } from '../common';
 
 type FilterType = 'all' | 'weights' | 'cardio';
 
@@ -31,6 +34,11 @@ export default function ActivityList() {
   const [filter, setFilter] = useState<FilterType>('all');
   const [isLoading, setIsLoading] = useState(true);
   const [editingWorkout, setEditingWorkout] = useState<WorkoutWithData | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    type: 'workout' | 'cardio';
+    id: string;
+  } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     loadActivities();
@@ -104,6 +112,33 @@ export default function ActivityList() {
     await loadActivities();
   };
 
+  const handleDeleteWorkout = (workoutId: string) => {
+    setDeleteConfirm({ type: 'workout', id: workoutId });
+  };
+
+  const handleDeleteCardio = (sessionId: string) => {
+    setDeleteConfirm({ type: 'cardio', id: sessionId });
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteConfirm) return;
+
+    setIsDeleting(true);
+    try {
+      if (deleteConfirm.type === 'workout') {
+        await deleteWorkout(deleteConfirm.id);
+      } else {
+        await deleteCardioSession(deleteConfirm.id);
+      }
+      setDeleteConfirm(null);
+      await loadActivities();
+    } catch (error) {
+      console.error('Failed to delete:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -166,11 +201,13 @@ export default function ActivityList() {
                 sets={getWorkoutData(activity.id)?.sets || []}
                 exercises={exercises}
                 onEdit={() => handleEditWorkout(activity.id)}
+                onDelete={() => handleDeleteWorkout(activity.id)}
               />
             ) : (
               <CardioCard
                 key={activity.id}
                 session={activity.data as CardioSession}
+                onDelete={() => handleDeleteCardio(activity.id)}
               />
             )
           )
@@ -185,6 +222,23 @@ export default function ActivityList() {
           exercises={exercises}
           onClose={() => setEditingWorkout(null)}
           onSaved={handleEditSaved}
+        />
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirm && (
+        <ConfirmDialog
+          title={`Delete ${deleteConfirm.type === 'workout' ? 'Workout' : 'Cardio Session'}?`}
+          message={
+            deleteConfirm.type === 'workout'
+              ? 'This will permanently delete the workout and all its sets. This action cannot be undone.'
+              : 'This will permanently delete this cardio session. This action cannot be undone.'
+          }
+          confirmLabel="Delete"
+          variant="danger"
+          isLoading={isDeleting}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setDeleteConfirm(null)}
         />
       )}
     </div>
