@@ -20,6 +20,18 @@
     <title>Fitness Tracker</title>
   </head>
   <body>
+    <script>
+      // Prevent flash of wrong theme on load
+      (function() {
+        try {
+          var stored = localStorage.getItem('fitness-settings');
+          var theme = stored ? JSON.parse(stored).state.theme : 'system';
+          var isDark = theme === 'dark' ||
+            (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

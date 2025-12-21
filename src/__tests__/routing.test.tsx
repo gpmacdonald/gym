@@ -49,7 +49,9 @@ describe('Routing', () => {
     it('should render settings page at /settings', () => {
       renderWithRouter('/settings');
       expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument();
-      expect(screen.getByText('Settings and data management will go here')).toBeInTheDocument();
+      // Check for theme toggle section
+      expect(screen.getByText('Appearance')).toBeInTheDocument();
+      expect(screen.getByText('Theme')).toBeInTheDocument();
     });
   });
 

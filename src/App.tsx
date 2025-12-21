@@ -1,8 +1,12 @@
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Home, Progress, Exercises, Settings } from './pages';
 import { AppShell } from './components/layout';
+import { useTheme } from './lib/theme';
 
 function App() {
+  // Apply theme on mount and listen for changes
+  useTheme();
+
   return (
     <HashRouter>
       <AppShell>
