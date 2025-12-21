@@ -107,9 +107,12 @@ describe('ExerciseList', () => {
       const searchInput = screen.getByPlaceholderText('Search exercises...');
       await user.type(searchInput, 'press');
 
+      // Wait for debounce to apply filter
+      await waitFor(() => {
+        expect(screen.queryByText('Squat')).not.toBeInTheDocument();
+      });
       expect(screen.getByText('Bench Press')).toBeInTheDocument();
       expect(screen.getByText('My Custom Press')).toBeInTheDocument();
-      expect(screen.queryByText('Squat')).not.toBeInTheDocument();
     });
 
     it('should show clear button when search has value', async () => {
@@ -136,10 +139,19 @@ describe('ExerciseList', () => {
 
       const searchInput = screen.getByPlaceholderText('Search exercises...');
       await user.type(searchInput, 'press');
+      
+      // Wait for debounce to filter
+      await waitFor(() => {
+        expect(screen.queryByText('Squat')).not.toBeInTheDocument();
+      });
+      
       await user.click(screen.getByLabelText('Clear search'));
 
+      // Wait for debounce to clear filter
+      await waitFor(() => {
+        expect(screen.getByText('Squat')).toBeInTheDocument();
+      });
       expect(searchInput).toHaveValue('');
-      expect(screen.getByText('Squat')).toBeInTheDocument();
     });
   });
 
@@ -322,7 +334,10 @@ describe('ExerciseList', () => {
       const searchInput = screen.getByPlaceholderText('Search exercises...');
       await user.type(searchInput, 'nonexistent');
 
-      expect(screen.getByText('No exercises match your filters')).toBeInTheDocument();
+      // Wait for debounce to apply filter
+      await waitFor(() => {
+        expect(screen.getByText('No exercises match your filters')).toBeInTheDocument();
+      });
     });
   });
 });

@@ -89,8 +89,11 @@ describe('ExerciseSelector', () => {
     const searchInput = screen.getByPlaceholderText('Search exercises...');
     await user.type(searchInput, 'bench');
 
+    // Wait for debounce to apply filter
+    await waitFor(() => {
+      expect(screen.queryByText('Squat')).not.toBeInTheDocument();
+    });
     expect(screen.getByText('Bench Press')).toBeInTheDocument();
-    expect(screen.queryByText('Squat')).not.toBeInTheDocument();
     expect(screen.queryByText('Deadlift')).not.toBeInTheDocument();
   });
 
@@ -157,7 +160,10 @@ describe('ExerciseSelector', () => {
     const searchInput = screen.getByPlaceholderText('Search exercises...');
     await user.type(searchInput, 'xyz nonexistent');
 
-    expect(screen.getByText('No exercises found')).toBeInTheDocument();
+    // Wait for debounce
+    await waitFor(() => {
+      expect(screen.getByText('No exercises found')).toBeInTheDocument();
+    });
   });
 
   it('should clear search when X button is clicked', async () => {
@@ -171,12 +177,18 @@ describe('ExerciseSelector', () => {
     const searchInput = screen.getByPlaceholderText('Search exercises...');
     await user.type(searchInput, 'bench');
 
-    expect(screen.queryByText('Squat')).not.toBeInTheDocument();
+    // Wait for debounce to filter
+    await waitFor(() => {
+      expect(screen.queryByText('Squat')).not.toBeInTheDocument();
+    });
 
     const clearButton = screen.getByLabelText('Clear search');
     await user.click(clearButton);
 
-    expect(screen.getByText('Squat')).toBeInTheDocument();
+    // Wait for debounce to clear filter
+    await waitFor(() => {
+      expect(screen.getByText('Squat')).toBeInTheDocument();
+    });
     expect(searchInput).toHaveValue('');
   });
 

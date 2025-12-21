@@ -1,7 +1,8 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { Search, X } from 'lucide-react';
 import type { Exercise, MuscleGroup } from '../../types';
 import { getAllExercises } from '../../lib/queries';
+import { useDebounce } from '../../lib/useDebounce';
 
 interface ExerciseSelectorProps {
   onSelect: (exercise: Exercise) => void;
@@ -17,6 +18,53 @@ const MUSCLE_GROUPS: MuscleGroup[] = [
   'core',
 ];
 
+// Memoized exercise item to prevent re-renders
+const ExerciseItem = memo(function ExerciseItem({
+  exercise,
+  onSelect,
+}: {
+  exercise: Exercise;
+  onSelect: (exercise: Exercise) => void;
+}) {
+  return (
+    <button
+      onClick={() => onSelect(exercise)}
+      className="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex justify-between items-center min-h-[44px]"
+    >
+      <span className="text-gray-900 dark:text-white font-medium">
+        {exercise.name}
+      </span>
+      <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+        {exercise.muscleGroup}
+      </span>
+    </button>
+  );
+});
+
+// Memoized filter chip
+const FilterChip = memo(function FilterChip({
+  group,
+  isSelected,
+  onClick,
+}: {
+  group: MuscleGroup;
+  isSelected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-3 py-1.5 text-sm font-medium rounded-full capitalize transition-colors ${
+        isSelected
+          ? 'bg-primary text-white'
+          : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+      }`}
+    >
+      {group}
+    </button>
+  );
+});
+
 export default function ExerciseSelector({
   onSelect,
   recentExerciseIds = [],
@@ -25,6 +73,9 @@ export default function ExerciseSelector({
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<MuscleGroup | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Debounce search query for better performance
+  const debouncedQuery = useDebounce(query, 200);
 
   useEffect(() => {
     loadExercises();
@@ -43,9 +94,9 @@ export default function ExerciseSelector({
   const filteredExercises = useMemo(() => {
     let result = exercises;
 
-    if (query) {
+    if (debouncedQuery) {
       result = result.filter((ex) =>
-        ex.name.toLowerCase().includes(query.toLowerCase())
+        ex.name.toLowerCase().includes(debouncedQuery.toLowerCase())
       );
     }
 
@@ -62,15 +113,15 @@ export default function ExerciseSelector({
       if (aRecent !== -1 && bRecent !== -1) return aRecent - bRecent;
       return a.name.localeCompare(b.name);
     });
-  }, [exercises, query, selectedGroup, recentExerciseIds]);
+  }, [exercises, debouncedQuery, selectedGroup, recentExerciseIds]);
 
-  function handleGroupClick(group: MuscleGroup) {
+  const handleGroupClick = useCallback((group: MuscleGroup) => {
     setSelectedGroup((prev) => (prev === group ? null : group));
-  }
+  }, []);
 
-  function clearSearch() {
+  const clearSearch = useCallback(() => {
     setQuery('');
-  }
+  }, []);
 
   if (isLoading) {
     return (
@@ -106,17 +157,12 @@ export default function ExerciseSelector({
       {/* Muscle Group Filter Chips */}
       <div className="flex flex-wrap gap-2">
         {MUSCLE_GROUPS.map((group) => (
-          <button
+          <FilterChip
             key={group}
+            group={group}
+            isSelected={selectedGroup === group}
             onClick={() => handleGroupClick(group)}
-            className={`px-3 py-1.5 text-sm font-medium rounded-full capitalize transition-colors ${
-              selectedGroup === group
-                ? 'bg-primary text-white'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-            }`}
-          >
-            {group}
-          </button>
+          />
         ))}
       </div>
 
@@ -128,18 +174,11 @@ export default function ExerciseSelector({
           </div>
         ) : (
           filteredExercises.map((exercise) => (
-            <button
+            <ExerciseItem
               key={exercise.id}
-              onClick={() => onSelect(exercise)}
-              className="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex justify-between items-center min-h-[44px]"
-            >
-              <span className="text-gray-900 dark:text-white font-medium">
-                {exercise.name}
-              </span>
-              <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
-                {exercise.muscleGroup}
-              </span>
-            </button>
+              exercise={exercise}
+              onSelect={onSelect}
+            />
           ))
         )}
       </div>

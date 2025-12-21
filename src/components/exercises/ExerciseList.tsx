@@ -1,8 +1,9 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { Search, X, Plus, Pencil, Trash2, Loader2 } from 'lucide-react';
 import type { Exercise, MuscleGroup } from '../../types';
 import { getAllExercises, deleteExercise } from '../../lib/queries';
 import { ConfirmDialog } from '../common';
+import { useDebounce } from '../../lib/useDebounce';
 import ExerciseModal from './ExerciseModal';
 
 const MUSCLE_GROUPS: MuscleGroup[] = [
@@ -13,6 +14,83 @@ const MUSCLE_GROUPS: MuscleGroup[] = [
   'arms',
   'core',
 ];
+
+// Memoized exercise list item
+const ExerciseListItem = memo(function ExerciseListItem({
+  exercise,
+  onEdit,
+  onDelete,
+}: {
+  exercise: Exercise;
+  onEdit: (exercise: Exercise) => void;
+  onDelete: (exercise: Exercise) => void;
+}) {
+  return (
+    <div className="p-4 flex items-center justify-between">
+      <div>
+        <div className="flex items-center gap-2">
+          <p className="font-medium text-gray-900 dark:text-white">
+            {exercise.name}
+          </p>
+          {exercise.isCustom && (
+            <span className="px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full">
+              Custom
+            </span>
+          )}
+        </div>
+        <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">
+          {exercise.muscleGroup} • {exercise.equipmentType}
+        </p>
+      </div>
+
+      {exercise.isCustom && (
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => onEdit(exercise)}
+            className="p-2 text-gray-400 hover:text-primary rounded-lg transition-colors"
+            aria-label={`Edit ${exercise.name}`}
+          >
+            <Pencil className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => onDelete(exercise)}
+            className="p-2 text-gray-400 hover:text-red-500 rounded-lg transition-colors"
+            aria-label={`Delete ${exercise.name}`}
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+});
+
+// Memoized filter chip
+const FilterChip = memo(function FilterChip({
+  group,
+  isSelected,
+  onClick,
+}: {
+  group: MuscleGroup;
+  isSelected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`px-3 py-1.5 text-sm font-medium rounded-full capitalize transition-colors ${
+        isSelected
+          ? 'bg-primary text-white'
+          : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+      }`}
+    >
+      {group}
+    </button>
+  );
+});
 
 export default function ExerciseList() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -26,6 +104,9 @@ export default function ExerciseList() {
   const [editingExercise, setEditingExercise] = useState<Exercise | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<Exercise | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Debounce search query
+  const debouncedQuery = useDebounce(query, 200);
 
   useEffect(() => {
     loadExercises();
@@ -47,8 +128,8 @@ export default function ExerciseList() {
     let result = exercises;
 
     // Filter by search query
-    if (query) {
-      const lowerQuery = query.toLowerCase();
+    if (debouncedQuery) {
+      const lowerQuery = debouncedQuery.toLowerCase();
       result = result.filter((ex) =>
         ex.name.toLowerCase().includes(lowerQuery)
       );
@@ -70,25 +151,25 @@ export default function ExerciseList() {
       if (!a.isCustom && b.isCustom) return 1;
       return a.name.localeCompare(b.name);
     });
-  }, [exercises, query, selectedGroup, showCustomOnly]);
+  }, [exercises, debouncedQuery, selectedGroup, showCustomOnly]);
 
-  const handleGroupClick = (group: MuscleGroup) => {
+  const handleGroupClick = useCallback((group: MuscleGroup) => {
     setSelectedGroup((prev) => (prev === group ? null : group));
-  };
+  }, []);
 
-  const handleAddExercise = () => {
+  const handleAddExercise = useCallback(() => {
     setEditingExercise(null);
     setShowModal(true);
-  };
+  }, []);
 
-  const handleEditExercise = (exercise: Exercise) => {
+  const handleEditExercise = useCallback((exercise: Exercise) => {
     setEditingExercise(exercise);
     setShowModal(true);
-  };
+  }, []);
 
-  const handleDeleteExercise = (exercise: Exercise) => {
+  const handleDeleteExercise = useCallback((exercise: Exercise) => {
     setDeleteConfirm(exercise);
-  };
+  }, []);
 
   const handleConfirmDelete = async () => {
     if (!deleteConfirm) return;
@@ -160,18 +241,12 @@ export default function ExerciseList() {
         {/* Muscle group filter */}
         <div className="flex flex-wrap gap-2">
           {MUSCLE_GROUPS.map((group) => (
-            <button
+            <FilterChip
               key={group}
-              type="button"
+              group={group}
+              isSelected={selectedGroup === group}
               onClick={() => handleGroupClick(group)}
-              className={`px-3 py-1.5 text-sm font-medium rounded-full capitalize transition-colors ${
-                selectedGroup === group
-                  ? 'bg-primary text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-              }`}
-            >
-              {group}
-            </button>
+            />
           ))}
         </div>
 
@@ -199,47 +274,12 @@ export default function ExerciseList() {
           </div>
         ) : (
           filteredExercises.map((exercise) => (
-            <div
+            <ExerciseListItem
               key={exercise.id}
-              className="p-4 flex items-center justify-between"
-            >
-              <div>
-                <div className="flex items-center gap-2">
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    {exercise.name}
-                  </p>
-                  {exercise.isCustom && (
-                    <span className="px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full">
-                      Custom
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">
-                  {exercise.muscleGroup} • {exercise.equipmentType}
-                </p>
-              </div>
-
-              {exercise.isCustom && (
-                <div className="flex items-center gap-1">
-                  <button
-                    type="button"
-                    onClick={() => handleEditExercise(exercise)}
-                    className="p-2 text-gray-400 hover:text-primary rounded-lg transition-colors"
-                    aria-label={`Edit ${exercise.name}`}
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteExercise(exercise)}
-                    className="p-2 text-gray-400 hover:text-red-500 rounded-lg transition-colors"
-                    aria-label={`Delete ${exercise.name}`}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              )}
-            </div>
+              exercise={exercise}
+              onEdit={handleEditExercise}
+              onDelete={handleDeleteExercise}
+            />
           ))
         )}
       </div>
