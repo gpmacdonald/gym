@@ -1,5 +1,5 @@
 import { Header } from '../components/layout';
-import { ThemeToggle, DataExport, DataImport } from '../components/settings';
+import { ThemeToggle, DataExport, DataImport, MockDataManager, AppInfo } from '../components/settings';
 
 export default function Settings() {
   return (
@@ -25,6 +25,18 @@ export default function Settings() {
             <DataExport />
             <hr className="border-gray-200 dark:border-gray-700" />
             <DataImport />
+            <hr className="border-gray-200 dark:border-gray-700" />
+            <MockDataManager />
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            About
+          </h2>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+            <AppInfo />
           </div>
         </section>
       </div>
