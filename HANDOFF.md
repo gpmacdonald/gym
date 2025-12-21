@@ -20,15 +20,15 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-40 COMPLETE** | **Next: Task 41 - Edit Workout Functionality**
+**Tasks 1-41 COMPLETE** | **Next: Task 42 - Delete Workout Functionality**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
 |------|-------------|--------|
-| 37 | Service Worker Setup | dad71ae |
 | 38 | Install Prompt | c8327b9 |
 | 39 | Dark Mode Implementation | a517f44 |
 | 40 | Rest Timer Component | 29628ad |
+| 41 | Edit Workout Functionality | b608471 |
 
 ## Project Structure
 
@@ -134,14 +134,13 @@ await seedMockData();  // Creates 3 months of realistic data
 await clearMockData(); // Clears workout data, keeps exercises
 ```
 
-## Next Task: Task 41 - Edit Workout Functionality
+## Next Task: Task 42 - Delete Workout Functionality
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2857. Remaining Phase 4 tasks:
-1. Task 41: Edit Workout Functionality - Edit button on workout cards
-2. Task 42: Delete Workout Functionality - Delete with confirmation
-3. Task 43: Workout Notes - Notes field in workout logger
-4. Task 44: Exercise Management Page - CRUD for exercises
-5. Task 45: Settings Page Completion
+Reference `TASK-CHECKLIST-FULL.md` around line 2863. Remaining Phase 4 tasks:
+1. Task 42: Delete Workout Functionality - Delete with confirmation
+2. Task 43: Workout Notes - Notes field in workout logger
+3. Task 44: Exercise Management Page - CRUD for exercises
+4. Task 45: Settings Page Completion
 
 ## Verification Before Starting
 
