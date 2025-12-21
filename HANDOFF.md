@@ -20,7 +20,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 
 ## Current Status
 
-**Tasks 1-47 COMPLETE** | **Next: Task 48 - Accessibility Audit**
+**Tasks 1-48 COMPLETE** | **Next: Task 49 - iOS Safari Testing**
 
 ### Recently Completed (This Session)
 | Task | Description | Commit |
@@ -29,6 +29,7 @@ Building a Personal Fitness Tracker PWA for weightlifting and cardio tracking. U
 | 45 | Settings Page Completion | dbac4e7 |
 | 46 | Bundle Size Optimization | aed620b |
 | 47 | Runtime Performance | a8bd2f2 |
+| 48 | Accessibility Audit | 6885efa |
 
 ### Previously Completed
 | Task | Description | Commit |
@@ -143,12 +144,12 @@ await seedMockData();  // Creates 3 months of realistic data
 await clearMockData(); // Clears workout data, keeps exercises
 ```
 
-## Next Task: Task 48 - Accessibility Audit
+## Next Task: Task 49 - iOS Safari Testing
 
-Reference `TASK-CHECKLIST-FULL.md` around line 2902. Phase 5 tasks:
-1. Task 48: Accessibility Audit - Lighthouse > 90, touch targets 44px+, color contrast, screen reader testing
-2. Task 49: iOS Safari Testing
-3. Task 50: Playwright E2E Setup
+Reference `TASK-CHECKLIST-FULL.md` around line 2907. Phase 5 tasks:
+1. Task 49: iOS Safari Testing - Test on multiple iPhone sizes, PWA installation, offline mode
+2. Task 50: Playwright E2E Setup
+3. Task 51: E2E Tests - Workout Flow
 
 ## Verification Before Starting
 
