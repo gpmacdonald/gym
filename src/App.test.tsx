@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import App from './App';
 
 // Mock the PWA module
@@ -15,20 +15,24 @@ vi.mock('./lib/pwa', () => ({
 }));
 
 describe('App', () => {
-  it('should render the home page by default', () => {
+  it('should render the home page by default', async () => {
     render(<App />);
-    // Check for the header title
-    expect(screen.getByRole('heading', { name: 'Home' })).toBeInTheDocument();
+    // Wait for lazy-loaded Home component
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Home' })).toBeInTheDocument();
+    });
     // Check for start workout button
     expect(screen.getByText(/Start.*Workout/)).toBeInTheDocument();
   });
 
-  it('should render within HashRouter with AppShell', () => {
+  it('should render within HashRouter with AppShell', async () => {
     render(<App />);
-    // AppShell renders the bottom nav
+    // AppShell renders the bottom nav immediately
     expect(screen.getByRole('navigation')).toBeInTheDocument();
-    // Check all nav items are present
-    expect(screen.getAllByText('Home')).toHaveLength(2); // Header + nav
+    // Wait for lazy-loaded Home page
+    await waitFor(() => {
+      expect(screen.getAllByText('Home')).toHaveLength(2); // Header + nav
+    });
     expect(screen.getByText('Progress')).toBeInTheDocument();
     expect(screen.getByText('Exercises')).toBeInTheDocument();
     expect(screen.getByText('Settings')).toBeInTheDocument();
