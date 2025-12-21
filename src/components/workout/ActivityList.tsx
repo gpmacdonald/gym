@@ -14,6 +14,7 @@ import type {
   Activity,
 } from '../../types';
 import WorkoutCard from './WorkoutCard';
+import EditWorkoutModal from './EditWorkoutModal';
 import { CardioCard } from '../cardio';
 
 type FilterType = 'all' | 'weights' | 'cardio';
@@ -29,6 +30,7 @@ export default function ActivityList() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [filter, setFilter] = useState<FilterType>('all');
   const [isLoading, setIsLoading] = useState(true);
+  const [editingWorkout, setEditingWorkout] = useState<WorkoutWithData | null>(null);
 
   useEffect(() => {
     loadActivities();
@@ -87,6 +89,19 @@ export default function ActivityList() {
   // Helper to get workout data by id
   const getWorkoutData = (workoutId: string) => {
     return workoutData.find((w) => w.workout.id === workoutId);
+  };
+
+  const handleEditWorkout = (workoutId: string) => {
+    const data = getWorkoutData(workoutId);
+    if (data) {
+      setEditingWorkout(data);
+    }
+  };
+
+  const handleEditSaved = async () => {
+    setEditingWorkout(null);
+    // Reload activities to show updated data
+    await loadActivities();
   };
 
   if (isLoading) {
@@ -150,6 +165,7 @@ export default function ActivityList() {
                 workout={activity.data as Workout}
                 sets={getWorkoutData(activity.id)?.sets || []}
                 exercises={exercises}
+                onEdit={() => handleEditWorkout(activity.id)}
               />
             ) : (
               <CardioCard
@@ -160,6 +176,17 @@ export default function ActivityList() {
           )
         )}
       </div>
+
+      {/* Edit Workout Modal */}
+      {editingWorkout && (
+        <EditWorkoutModal
+          workout={editingWorkout.workout}
+          sets={editingWorkout.sets}
+          exercises={exercises}
+          onClose={() => setEditingWorkout(null)}
+          onSaved={handleEditSaved}
+        />
+      )}
     </div>
   );
 }

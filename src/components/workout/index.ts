@@ -7,3 +7,4 @@ export { default as WorkoutCard } from './WorkoutCard';
 export { default as WorkoutList } from './WorkoutList';
 export { default as ActivityList } from './ActivityList';
 export { default as RestTimer } from './RestTimer';
+export { default as EditWorkoutModal } from './EditWorkoutModal';

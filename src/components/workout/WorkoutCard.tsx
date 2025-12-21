@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Pencil } from 'lucide-react';
 import type { Workout, WorkoutSet, Exercise } from '../../types';
 import { useSettingsStore } from '../../stores';
 
@@ -7,6 +7,7 @@ interface WorkoutCardProps {
   workout: Workout;
   sets: WorkoutSet[];
   exercises: Exercise[];
+  onEdit?: () => void;
 }
 
 function formatDate(date: Date): string {
@@ -36,9 +37,15 @@ export default function WorkoutCard({
   workout,
   sets,
   exercises,
+  onEdit,
 }: WorkoutCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const { weightUnit } = useSettingsStore();
+
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onEdit?.();
+  };
 
   // Group sets by exercise
   const setsByExercise = sets.reduce(
@@ -80,6 +87,19 @@ export default function WorkoutCard({
 
       {isExpanded && (
         <div className="px-4 pb-4 border-t border-gray-100 dark:border-gray-700">
+          {/* Edit button */}
+          {onEdit && (
+            <div className="flex justify-end mt-2 mb-1">
+              <button
+                type="button"
+                onClick={handleEditClick}
+                className="flex items-center gap-1 px-3 py-1.5 text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors"
+              >
+                <Pencil className="w-4 h-4" />
+                Edit
+              </button>
+            </div>
+          )}
           {Object.entries(setsByExercise).map(([exerciseId, exerciseSets]) => {
             const exercise = exercises.find((e) => e.id === exerciseId);
             return (
