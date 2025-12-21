@@ -156,12 +156,14 @@ export function useInstallPrompt() {
   }, []);
 
   // Show prompt conditions:
-  // - Can install (browser supports it and not already installed)
+  // - For iOS: always show after first workout (no beforeinstallprompt on iOS)
+  // - For others: Can install (browser supports it and not already installed)
   // - Not already dismissed by user
   // - First workout has been completed
   // - Not already running as PWA
+  const isiOS = isIOS();
   const shouldShowPrompt =
-    canInstall && !isDismissed && hasCompletedFirstWorkout && !isPWA;
+    (isiOS || canInstall) && !isDismissed && hasCompletedFirstWorkout && !isPWA;
 
   return {
     canInstall,
