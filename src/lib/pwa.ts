@@ -180,8 +180,31 @@ export function useInstallPrompt() {
  */
 export function isIOS(): boolean {
   if (typeof window === 'undefined') return false;
-  return (
-    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-  );
+
+  const userAgent = navigator.userAgent.toLowerCase();
+
+  // Check for iPhone, iPad, iPod in user agent
+  if (/iphone|ipad|ipod/.test(userAgent)) {
+    return true;
+  }
+
+  // Check for iPad on iOS 13+ (reports as Mac)
+  // navigator.platform is deprecated but still useful as fallback
+  if (
+    (navigator.platform === 'MacIntel' ||
+     (navigator as Navigator & { userAgentData?: { platform: string } }).userAgentData?.platform === 'macOS') &&
+    navigator.maxTouchPoints > 1
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Reset install prompt state (for testing)
+ */
+export function resetInstallPromptState(): void {
+  localStorage.removeItem(INSTALL_PROMPT_DISMISSED_KEY);
+  localStorage.removeItem(FIRST_WORKOUT_COMPLETED_KEY);
 }

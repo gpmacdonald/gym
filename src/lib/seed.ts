@@ -1,6 +1,6 @@
 import { db } from './db';
 import type { Exercise, MuscleGroup, EquipmentType, CardioType } from '../types';
-import { addWorkout, addSet, addCardioSession } from './queries';
+import { addWorkout, addSet, addCardioSession, generateId } from './queries';
 
 // Default exercises from PRD (46 total) with equipment types
 const DEFAULT_EXERCISES: Array<{
@@ -85,7 +85,7 @@ export async function seedExercises(): Promise<number> {
 
   const now = new Date();
   const exercises: Exercise[] = DEFAULT_EXERCISES.map((ex) => ({
-    id: crypto.randomUUID(),
+    id: generateId(),
     name: ex.name,
     muscleGroup: ex.muscleGroup,
     equipmentType: ex.equipmentType,

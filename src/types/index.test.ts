@@ -131,14 +131,14 @@ describe('TypeScript Types', () => {
   it('should create a valid Settings object', () => {
     const settings: Settings = {
       id: 'settings',
-      weightUnit: 'lbs',
-      distanceUnit: 'miles',
+      weightUnit: 'kg',
+      distanceUnit: 'km',
       theme: 'system',
       restTimerDefault: 90,
       barbellWeight: 20,
     };
     expect(settings.id).toBe('settings');
-    expect(settings.weightUnit).toBe('lbs');
+    expect(settings.weightUnit).toBe('kg');
     expect(settings.barbellWeight).toBe(20);
   });
 

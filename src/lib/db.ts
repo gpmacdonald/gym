@@ -44,7 +44,7 @@ export async function initializeSettings(): Promise<Settings> {
   const defaultSettings: Settings = {
     id: 'settings',
     weightUnit: 'kg',
-    distanceUnit: 'miles',
+    distanceUnit: 'km',
     theme: 'system',
     restTimerDefault: 90,
     barbellWeight: 20, // Standard Olympic barbell weight in kg

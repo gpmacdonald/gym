@@ -6,7 +6,7 @@ describe('Settings Store', () => {
     // Reset to default values before each test
     useSettingsStore.setState({
       weightUnit: 'kg',
-      distanceUnit: 'miles',
+      distanceUnit: 'km',
       theme: 'system',
       restTimerDefault: 90,
       barbellWeight: 20,
@@ -17,7 +17,7 @@ describe('Settings Store', () => {
     it('should have correct default values', () => {
       const state = useSettingsStore.getState();
       expect(state.weightUnit).toBe('kg');
-      expect(state.distanceUnit).toBe('miles');
+      expect(state.distanceUnit).toBe('km');
       expect(state.theme).toBe('system');
       expect(state.restTimerDefault).toBe(90);
       expect(state.barbellWeight).toBe(20);
@@ -38,15 +38,15 @@ describe('Settings Store', () => {
   });
 
   describe('Distance Unit', () => {
-    it('should update distance unit to km', () => {
-      useSettingsStore.getState().setDistanceUnit('km');
-      expect(useSettingsStore.getState().distanceUnit).toBe('km');
-    });
-
-    it('should update distance unit back to miles', () => {
-      useSettingsStore.getState().setDistanceUnit('km');
+    it('should update distance unit to miles', () => {
       useSettingsStore.getState().setDistanceUnit('miles');
       expect(useSettingsStore.getState().distanceUnit).toBe('miles');
+    });
+
+    it('should update distance unit back to km', () => {
+      useSettingsStore.getState().setDistanceUnit('miles');
+      useSettingsStore.getState().setDistanceUnit('km');
+      expect(useSettingsStore.getState().distanceUnit).toBe('km');
     });
   });
 
@@ -115,7 +115,7 @@ describe('Settings Store', () => {
       expect(state.theme).toBe('dark');
       expect(state.restTimerDefault).toBe(120);
       // Unchanged values should remain
-      expect(state.distanceUnit).toBe('miles');
+      expect(state.distanceUnit).toBe('km');
       expect(state.barbellWeight).toBe(20);
     });
   });

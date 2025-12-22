@@ -328,7 +328,7 @@ describe('Database', () => {
 
       expect(settings.id).toBe('settings');
       expect(settings.weightUnit).toBe('kg');
-      expect(settings.distanceUnit).toBe('miles');
+      expect(settings.distanceUnit).toBe('km');
       expect(settings.theme).toBe('system');
       expect(settings.restTimerDefault).toBe(90);
       expect(settings.barbellWeight).toBe(20);

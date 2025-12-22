@@ -51,6 +51,8 @@ describe('WorkoutLogger', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Clear localStorage to avoid state restoration between tests
+    localStorage.removeItem('workout-in-progress');
   });
 
   it('should render Add Exercise button', () => {

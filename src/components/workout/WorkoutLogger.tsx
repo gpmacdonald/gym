@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Plus, Save, X, Timer } from 'lucide-react';
 import type { Exercise } from '../../types';
 import { addWorkout, addSet } from '../../lib/queries';
@@ -24,15 +24,66 @@ interface WorkoutLoggerProps {
   onCancel: () => void;
 }
 
+const STORAGE_KEY = 'workout-in-progress';
+
+interface StoredWorkoutState {
+  exercises: ExerciseWithSets[];
+  activeExerciseIndex: number | null;
+  notes: string;
+}
+
+function loadStoredState(): StoredWorkoutState | null {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch {
+    // Ignore parse errors
+  }
+  return null;
+}
+
+function clearStoredState(): void {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // Ignore errors
+  }
+}
+
 export default function WorkoutLogger({ onComplete, onCancel }: WorkoutLoggerProps) {
-  const [exercises, setExercises] = useState<ExerciseWithSets[]>([]);
+  const [exercises, setExercises] = useState<ExerciseWithSets[]>(() => {
+    const stored = loadStoredState();
+    return stored?.exercises ?? [];
+  });
   const [showExerciseSelector, setShowExerciseSelector] = useState(false);
-  const [activeExerciseIndex, setActiveExerciseIndex] = useState<number | null>(null);
+  const [activeExerciseIndex, setActiveExerciseIndex] = useState<number | null>(() => {
+    const stored = loadStoredState();
+    return stored?.activeExerciseIndex ?? null;
+  });
   const [isSaving, setIsSaving] = useState(false);
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState(() => {
+    const stored = loadStoredState();
+    return stored?.notes ?? '';
+  });
   const [showTimer, setShowTimer] = useState(false);
-  const [timerKey, setTimerKey] = useState(0); // Used to reset timer on new set
+  const [timerKey, setTimerKey] = useState(0);
   const { markFirstWorkoutComplete } = useInstallPrompt();
+
+  // Persist state to localStorage whenever it changes
+  const saveState = useCallback(() => {
+    try {
+      const state: StoredWorkoutState = { exercises, activeExerciseIndex, notes };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch {
+      // Ignore storage errors
+    }
+  }, [exercises, activeExerciseIndex, notes]);
+
+  useEffect(() => {
+    saveState();
+  }, [saveState]);
 
   const recentExerciseIds = exercises.map((e) => e.exercise.id);
 
@@ -126,12 +177,19 @@ export default function WorkoutLogger({ onComplete, onCancel }: WorkoutLoggerPro
       // Mark first workout complete for install prompt
       markFirstWorkoutComplete();
 
+      // Clear stored state on successful save
+      clearStoredState();
       onComplete();
     } catch (error) {
       console.error('Failed to save workout:', error);
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleCancel = () => {
+    clearStoredState();
+    onCancel();
   };
 
   const totalSets = exercises.reduce((sum, e) => sum + e.sets.length, 0);
@@ -170,7 +228,7 @@ export default function WorkoutLogger({ onComplete, onCancel }: WorkoutLoggerPro
       <div className="flex items-center justify-between">
         <button
           type="button"
-          onClick={onCancel}
+          onClick={handleCancel}
           className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
         >
           Cancel

@@ -23,7 +23,7 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       // Default values (matching db.ts defaults)
       weightUnit: 'kg',
-      distanceUnit: 'miles',
+      distanceUnit: 'km',
       theme: 'system',
       restTimerDefault: 90,
       barbellWeight: 20, // Standard Olympic barbell (20kg / ~45lbs)

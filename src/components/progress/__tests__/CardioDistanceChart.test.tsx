@@ -10,7 +10,7 @@ vi.mock('../../../lib/progressQueries', () => ({
 // Mock the settings store
 vi.mock('../../../stores', () => ({
   useSettingsStore: () => ({
-    distanceUnit: 'miles',
+    distanceUnit: 'km',
   }),
 }));
 
@@ -60,9 +60,9 @@ describe('CardioDistanceChart', () => {
     );
 
     await waitFor(() => {
-      // Should show total distance (3.5 + 4.0 = 7.5)
+      // Should show total distance (3.5 + 4.0 = 7.5 miles → 12.1 km with conversion)
       expect(screen.getByText(/Total:/)).toBeInTheDocument();
-      expect(screen.getByText(/7.5/)).toBeInTheDocument();
+      expect(screen.getByText(/12\.1/)).toBeInTheDocument();
       // Should have recharts container
       expect(
         container.querySelector('.recharts-responsive-container')
