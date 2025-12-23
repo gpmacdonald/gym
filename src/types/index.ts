@@ -23,7 +23,12 @@ export type EquipmentType =
   | 'dumbbell'
   | 'machine'
   | 'cable'
-  | 'bodyweight';
+  | 'bodyweight'
+  | 'kettlebell'
+  | 'ez-bar'
+  | 'trap-bar'
+  | 'resistance-band'
+  | 'other';
 
 // Exercise interface
 export interface Exercise {

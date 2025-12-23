@@ -14,15 +14,15 @@ describe('Exercise Seeding', () => {
 
   it('should return correct default exercise count', () => {
     const count = getDefaultExerciseCount();
-    expect(count).toBe(46);
+    expect(count).toBe(149);
   });
 
-  it('should seed all 46 exercises', async () => {
+  it('should seed all exercises', async () => {
     const seededCount = await seedExercises();
-    expect(seededCount).toBe(46);
+    expect(seededCount).toBe(149);
 
     const exercises = await db.exercises.toArray();
-    expect(exercises).toHaveLength(46);
+    expect(exercises).toHaveLength(149);
   });
 
   it('should mark all seeded exercises as non-custom', async () => {
@@ -50,23 +50,23 @@ describe('Exercise Seeding', () => {
     const arms = await db.exercises.where('muscleGroup').equals('arms').count();
     const core = await db.exercises.where('muscleGroup').equals('core').count();
 
-    expect(chest).toBe(7);
-    expect(back).toBe(8);
-    expect(legs).toBe(10);
-    expect(shoulders).toBe(7);
-    expect(arms).toBe(8);
-    expect(core).toBe(6);
+    expect(chest).toBe(15);
+    expect(back).toBe(26);
+    expect(legs).toBe(36);
+    expect(shoulders).toBe(18);
+    expect(arms).toBe(34);
+    expect(core).toBe(20);
   });
 
   it('should not reseed if already seeded', async () => {
     const firstSeed = await seedExercises();
-    expect(firstSeed).toBe(46);
+    expect(firstSeed).toBe(149);
 
     const secondSeed = await seedExercises();
     expect(secondSeed).toBe(0);
 
     const exercises = await db.exercises.toArray();
-    expect(exercises).toHaveLength(46);
+    expect(exercises).toHaveLength(149);
   });
 
   it('should report isSeeded correctly', async () => {
@@ -93,11 +93,11 @@ describe('Exercise Seeding', () => {
 
     // Seed should still work
     const seededCount = await seedExercises();
-    expect(seededCount).toBe(46);
+    expect(seededCount).toBe(149);
 
     // Custom exercise should still exist
     const allExercises = await db.exercises.toArray();
-    expect(allExercises).toHaveLength(47); // 46 default + 1 custom
+    expect(allExercises).toHaveLength(150); // 149 default + 1 custom
   });
 
   it('should reseed exercises (clearing all)', async () => {
@@ -114,14 +114,14 @@ describe('Exercise Seeding', () => {
     });
 
     const beforeReseed = await db.exercises.count();
-    expect(beforeReseed).toBe(47);
+    expect(beforeReseed).toBe(150);
 
     // Reseed clears everything
     const reseededCount = await reseedExercises();
-    expect(reseededCount).toBe(46);
+    expect(reseededCount).toBe(149);
 
     const afterReseed = await db.exercises.count();
-    expect(afterReseed).toBe(46);
+    expect(afterReseed).toBe(149);
   });
 
   it('should include specific exercises from PRD', async () => {

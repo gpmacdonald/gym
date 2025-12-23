@@ -2,69 +2,191 @@ import { db } from './db';
 import type { Exercise, MuscleGroup, EquipmentType, CardioType } from '../types';
 import { addWorkout, addSet, addCardioSession, generateId } from './queries';
 
-// Default exercises from PRD (46 total) with equipment types
+// Comprehensive exercise library (~150 exercises) sourced from StrengthLog
 const DEFAULT_EXERCISES: Array<{
   name: string;
   muscleGroup: MuscleGroup;
   equipmentType: EquipmentType;
 }> = [
-  // Chest (7)
+  // ============================================================================
+  // CHEST (15 exercises)
+  // ============================================================================
   { name: 'Barbell Bench Press', muscleGroup: 'chest', equipmentType: 'barbell' },
   { name: 'Dumbbell Bench Press', muscleGroup: 'chest', equipmentType: 'dumbbell' },
   { name: 'Incline Barbell Bench Press', muscleGroup: 'chest', equipmentType: 'barbell' },
-  { name: 'Incline Dumbbell Bench Press', muscleGroup: 'chest', equipmentType: 'dumbbell' },
-  { name: 'Dumbbell Flyes', muscleGroup: 'chest', equipmentType: 'dumbbell' },
-  { name: 'Cable Flyes', muscleGroup: 'chest', equipmentType: 'cable' },
-  { name: 'Push-ups', muscleGroup: 'chest', equipmentType: 'bodyweight' },
+  { name: 'Incline Dumbbell Press', muscleGroup: 'chest', equipmentType: 'dumbbell' },
+  { name: 'Decline Bench Press', muscleGroup: 'chest', equipmentType: 'barbell' },
+  { name: 'Decline Dumbbell Press', muscleGroup: 'chest', equipmentType: 'dumbbell' },
+  { name: 'Machine Chest Press', muscleGroup: 'chest', equipmentType: 'machine' },
+  { name: 'Smith Machine Bench Press', muscleGroup: 'chest', equipmentType: 'machine' },
+  { name: 'Smith Machine Incline Press', muscleGroup: 'chest', equipmentType: 'machine' },
+  { name: 'Dumbbell Chest Fly', muscleGroup: 'chest', equipmentType: 'dumbbell' },
+  { name: 'Machine Chest Fly', muscleGroup: 'chest', equipmentType: 'machine' },
+  { name: 'Cable Chest Fly', muscleGroup: 'chest', equipmentType: 'cable' },
+  { name: 'Standing Cable Chest Fly', muscleGroup: 'chest', equipmentType: 'cable' },
+  { name: 'Push-Up', muscleGroup: 'chest', equipmentType: 'bodyweight' },
+  { name: 'Diamond Push-Up', muscleGroup: 'chest', equipmentType: 'bodyweight' },
 
-  // Back (8)
+  // ============================================================================
+  // BACK (25 exercises)
+  // ============================================================================
   { name: 'Conventional Deadlift', muscleGroup: 'back', equipmentType: 'barbell' },
+  { name: 'Sumo Deadlift', muscleGroup: 'back', equipmentType: 'barbell' },
+  { name: 'Trap Bar Deadlift', muscleGroup: 'back', equipmentType: 'trap-bar' },
+  { name: 'Rack Pull', muscleGroup: 'back', equipmentType: 'barbell' },
+  { name: 'Deficit Deadlift', muscleGroup: 'back', equipmentType: 'barbell' },
+  { name: 'Good Morning', muscleGroup: 'back', equipmentType: 'barbell' },
+  { name: 'Back Extension', muscleGroup: 'back', equipmentType: 'machine' },
   { name: 'Barbell Row', muscleGroup: 'back', equipmentType: 'barbell' },
+  { name: 'Pendlay Row', muscleGroup: 'back', equipmentType: 'barbell' },
   { name: 'Dumbbell Row', muscleGroup: 'back', equipmentType: 'dumbbell' },
-  { name: 'Pull-ups', muscleGroup: 'back', equipmentType: 'bodyweight' },
-  { name: 'Lat Pulldown', muscleGroup: 'back', equipmentType: 'cable' },
+  { name: 'Seal Row', muscleGroup: 'back', equipmentType: 'barbell' },
+  { name: 'T-Bar Row', muscleGroup: 'back', equipmentType: 'machine' },
+  { name: 'Machine Row', muscleGroup: 'back', equipmentType: 'machine' },
   { name: 'Seated Cable Row', muscleGroup: 'back', equipmentType: 'cable' },
-  { name: 'T-Bar Row', muscleGroup: 'back', equipmentType: 'barbell' },
-  { name: 'Face Pulls', muscleGroup: 'back', equipmentType: 'cable' },
+  { name: 'Close-Grip Cable Row', muscleGroup: 'back', equipmentType: 'cable' },
+  { name: 'Pull-Up', muscleGroup: 'back', equipmentType: 'bodyweight' },
+  { name: 'Chin-Up', muscleGroup: 'back', equipmentType: 'bodyweight' },
+  { name: 'Neutral Grip Pull-Up', muscleGroup: 'back', equipmentType: 'bodyweight' },
+  { name: 'Lat Pulldown', muscleGroup: 'back', equipmentType: 'cable' },
+  { name: 'Close-Grip Lat Pulldown', muscleGroup: 'back', equipmentType: 'cable' },
+  { name: 'Straight-Arm Lat Pulldown', muscleGroup: 'back', equipmentType: 'cable' },
+  { name: 'Face Pull', muscleGroup: 'back', equipmentType: 'cable' },
+  { name: 'Dumbbell Pullover', muscleGroup: 'back', equipmentType: 'dumbbell' },
+  { name: 'Barbell Shrug', muscleGroup: 'back', equipmentType: 'barbell' },
+  { name: 'Dumbbell Shrug', muscleGroup: 'back', equipmentType: 'dumbbell' },
+  { name: 'Kettlebell Swing', muscleGroup: 'back', equipmentType: 'kettlebell' },
 
-  // Legs (10)
+  // ============================================================================
+  // LEGS (35 exercises - quads, hamstrings, glutes, calves)
+  // ============================================================================
+  // Quads
   { name: 'Barbell Back Squat', muscleGroup: 'legs', equipmentType: 'barbell' },
   { name: 'Barbell Front Squat', muscleGroup: 'legs', equipmentType: 'barbell' },
-  { name: 'Romanian Deadlift', muscleGroup: 'legs', equipmentType: 'barbell' },
+  { name: 'Goblet Squat', muscleGroup: 'legs', equipmentType: 'dumbbell' },
+  { name: 'Hack Squat', muscleGroup: 'legs', equipmentType: 'machine' },
+  { name: 'Belt Squat', muscleGroup: 'legs', equipmentType: 'machine' },
+  { name: 'Smith Machine Squat', muscleGroup: 'legs', equipmentType: 'machine' },
   { name: 'Leg Press', muscleGroup: 'legs', equipmentType: 'machine' },
-  { name: 'Bulgarian Split Squat', muscleGroup: 'legs', equipmentType: 'dumbbell' },
-  { name: 'Lunges', muscleGroup: 'legs', equipmentType: 'dumbbell' },
   { name: 'Leg Extension', muscleGroup: 'legs', equipmentType: 'machine' },
-  { name: 'Leg Curl', muscleGroup: 'legs', equipmentType: 'machine' },
-  { name: 'Calf Raise', muscleGroup: 'legs', equipmentType: 'machine' },
+  { name: 'Barbell Lunge', muscleGroup: 'legs', equipmentType: 'barbell' },
+  { name: 'Dumbbell Lunge', muscleGroup: 'legs', equipmentType: 'dumbbell' },
+  { name: 'Walking Lunge', muscleGroup: 'legs', equipmentType: 'dumbbell' },
+  { name: 'Reverse Lunge', muscleGroup: 'legs', equipmentType: 'dumbbell' },
+  { name: 'Bulgarian Split Squat', muscleGroup: 'legs', equipmentType: 'dumbbell' },
+  { name: 'Step Up', muscleGroup: 'legs', equipmentType: 'dumbbell' },
+  { name: 'Pistol Squat', muscleGroup: 'legs', equipmentType: 'bodyweight' },
+  { name: 'Sissy Squat', muscleGroup: 'legs', equipmentType: 'bodyweight' },
+  // Hamstrings
+  { name: 'Romanian Deadlift', muscleGroup: 'legs', equipmentType: 'barbell' },
+  { name: 'Dumbbell Romanian Deadlift', muscleGroup: 'legs', equipmentType: 'dumbbell' },
+  { name: 'Stiff-Legged Deadlift', muscleGroup: 'legs', equipmentType: 'barbell' },
+  { name: 'Single-Leg Romanian Deadlift', muscleGroup: 'legs', equipmentType: 'dumbbell' },
+  { name: 'Seated Leg Curl', muscleGroup: 'legs', equipmentType: 'machine' },
+  { name: 'Lying Leg Curl', muscleGroup: 'legs', equipmentType: 'machine' },
+  { name: 'Nordic Hamstring Curl', muscleGroup: 'legs', equipmentType: 'bodyweight' },
+  // Glutes
   { name: 'Hip Thrust', muscleGroup: 'legs', equipmentType: 'barbell' },
+  { name: 'Single-Leg Hip Thrust', muscleGroup: 'legs', equipmentType: 'bodyweight' },
+  { name: 'Glute Bridge', muscleGroup: 'legs', equipmentType: 'bodyweight' },
+  { name: 'Barbell Glute Bridge', muscleGroup: 'legs', equipmentType: 'barbell' },
+  { name: 'Single-Leg Glute Bridge', muscleGroup: 'legs', equipmentType: 'bodyweight' },
+  { name: 'Cable Pull-Through', muscleGroup: 'legs', equipmentType: 'cable' },
+  { name: 'Hip Abduction Machine', muscleGroup: 'legs', equipmentType: 'machine' },
+  { name: 'Banded Side Kicks', muscleGroup: 'legs', equipmentType: 'resistance-band' },
+  // Calves
+  { name: 'Standing Calf Raise', muscleGroup: 'legs', equipmentType: 'machine' },
+  { name: 'Seated Calf Raise', muscleGroup: 'legs', equipmentType: 'machine' },
+  { name: 'Leg Press Calf Raise', muscleGroup: 'legs', equipmentType: 'machine' },
+  { name: 'Donkey Calf Raise', muscleGroup: 'legs', equipmentType: 'machine' },
+  { name: 'Single-Leg Calf Raise', muscleGroup: 'legs', equipmentType: 'bodyweight' },
 
-  // Shoulders (7)
+  // ============================================================================
+  // SHOULDERS (18 exercises)
+  // ============================================================================
   { name: 'Overhead Press', muscleGroup: 'shoulders', equipmentType: 'barbell' },
-  { name: 'Dumbbell Shoulder Press', muscleGroup: 'shoulders', equipmentType: 'dumbbell' },
-  { name: 'Lateral Raises', muscleGroup: 'shoulders', equipmentType: 'dumbbell' },
-  { name: 'Front Raises', muscleGroup: 'shoulders', equipmentType: 'dumbbell' },
-  { name: 'Rear Delt Flyes', muscleGroup: 'shoulders', equipmentType: 'dumbbell' },
-  { name: 'Upright Row', muscleGroup: 'shoulders', equipmentType: 'barbell' },
+  { name: 'Push Press', muscleGroup: 'shoulders', equipmentType: 'barbell' },
+  { name: 'Behind the Neck Press', muscleGroup: 'shoulders', equipmentType: 'barbell' },
+  { name: 'Seated Dumbbell Shoulder Press', muscleGroup: 'shoulders', equipmentType: 'dumbbell' },
+  { name: 'Standing Dumbbell Shoulder Press', muscleGroup: 'shoulders', equipmentType: 'dumbbell' },
   { name: 'Arnold Press', muscleGroup: 'shoulders', equipmentType: 'dumbbell' },
+  { name: 'Machine Shoulder Press', muscleGroup: 'shoulders', equipmentType: 'machine' },
+  { name: 'Smith Machine Shoulder Press', muscleGroup: 'shoulders', equipmentType: 'machine' },
+  { name: 'Dumbbell Lateral Raise', muscleGroup: 'shoulders', equipmentType: 'dumbbell' },
+  { name: 'Cable Lateral Raise', muscleGroup: 'shoulders', equipmentType: 'cable' },
+  { name: 'Machine Lateral Raise', muscleGroup: 'shoulders', equipmentType: 'machine' },
+  { name: 'Barbell Front Raise', muscleGroup: 'shoulders', equipmentType: 'barbell' },
+  { name: 'Dumbbell Front Raise', muscleGroup: 'shoulders', equipmentType: 'dumbbell' },
+  { name: 'Reverse Dumbbell Fly', muscleGroup: 'shoulders', equipmentType: 'dumbbell' },
+  { name: 'Cable Reverse Fly', muscleGroup: 'shoulders', equipmentType: 'cable' },
+  { name: 'Barbell Upright Row', muscleGroup: 'shoulders', equipmentType: 'barbell' },
+  { name: 'Dumbbell Upright Row', muscleGroup: 'shoulders', equipmentType: 'dumbbell' },
+  { name: 'Barbell Rear Delt Row', muscleGroup: 'shoulders', equipmentType: 'barbell' },
 
-  // Arms (8)
+  // ============================================================================
+  // ARMS (35 exercises - biceps, triceps, forearms)
+  // ============================================================================
+  // Biceps
   { name: 'Barbell Curl', muscleGroup: 'arms', equipmentType: 'barbell' },
+  { name: 'EZ-Bar Curl', muscleGroup: 'arms', equipmentType: 'ez-bar' },
+  { name: 'Cheat Curl', muscleGroup: 'arms', equipmentType: 'barbell' },
   { name: 'Dumbbell Curl', muscleGroup: 'arms', equipmentType: 'dumbbell' },
   { name: 'Hammer Curl', muscleGroup: 'arms', equipmentType: 'dumbbell' },
-  { name: 'Preacher Curl', muscleGroup: 'arms', equipmentType: 'dumbbell' },
-  { name: 'Tricep Pushdown', muscleGroup: 'arms', equipmentType: 'cable' },
-  { name: 'Overhead Tricep Extension', muscleGroup: 'arms', equipmentType: 'dumbbell' },
-  { name: 'Dips', muscleGroup: 'arms', equipmentType: 'bodyweight' },
+  { name: 'Incline Dumbbell Curl', muscleGroup: 'arms', equipmentType: 'dumbbell' },
+  { name: 'Concentration Curl', muscleGroup: 'arms', equipmentType: 'dumbbell' },
+  { name: 'Spider Curl', muscleGroup: 'arms', equipmentType: 'dumbbell' },
+  { name: 'Zottman Curl', muscleGroup: 'arms', equipmentType: 'dumbbell' },
+  { name: 'Preacher Curl (Barbell)', muscleGroup: 'arms', equipmentType: 'barbell' },
+  { name: 'Preacher Curl (Dumbbell)', muscleGroup: 'arms', equipmentType: 'dumbbell' },
+  { name: 'Machine Bicep Curl', muscleGroup: 'arms', equipmentType: 'machine' },
+  { name: 'Cable Curl (Bar)', muscleGroup: 'arms', equipmentType: 'cable' },
+  { name: 'Cable Curl (Rope)', muscleGroup: 'arms', equipmentType: 'cable' },
+  { name: 'Reverse Curl', muscleGroup: 'arms', equipmentType: 'barbell' },
+  // Triceps
   { name: 'Close-Grip Bench Press', muscleGroup: 'arms', equipmentType: 'barbell' },
+  { name: 'Tricep Pushdown (Bar)', muscleGroup: 'arms', equipmentType: 'cable' },
+  { name: 'Tricep Pushdown (Rope)', muscleGroup: 'arms', equipmentType: 'cable' },
+  { name: 'Overhead Cable Tricep Extension', muscleGroup: 'arms', equipmentType: 'cable' },
+  { name: 'Dumbbell Overhead Tricep Extension', muscleGroup: 'arms', equipmentType: 'dumbbell' },
+  { name: 'Barbell Lying Tricep Extension', muscleGroup: 'arms', equipmentType: 'barbell' },
+  { name: 'Dumbbell Lying Tricep Extension', muscleGroup: 'arms', equipmentType: 'dumbbell' },
+  { name: 'EZ-Bar Skull Crusher', muscleGroup: 'arms', equipmentType: 'ez-bar' },
+  { name: 'Dip', muscleGroup: 'arms', equipmentType: 'bodyweight' },
+  { name: 'Bench Dip', muscleGroup: 'arms', equipmentType: 'bodyweight' },
+  { name: 'Close-Grip Push-Up', muscleGroup: 'arms', equipmentType: 'bodyweight' },
+  { name: 'Tricep Kickback', muscleGroup: 'arms', equipmentType: 'dumbbell' },
+  // Forearms
+  { name: 'Wrist Curl (Barbell)', muscleGroup: 'arms', equipmentType: 'barbell' },
+  { name: 'Wrist Curl (Dumbbell)', muscleGroup: 'arms', equipmentType: 'dumbbell' },
+  { name: 'Reverse Wrist Curl', muscleGroup: 'arms', equipmentType: 'barbell' },
+  { name: 'Behind-the-Back Wrist Curl', muscleGroup: 'arms', equipmentType: 'barbell' },
+  { name: 'Farmers Walk', muscleGroup: 'arms', equipmentType: 'dumbbell' },
+  { name: 'Plate Pinch', muscleGroup: 'arms', equipmentType: 'other' },
+  { name: 'Dead Hang', muscleGroup: 'arms', equipmentType: 'bodyweight' },
 
-  // Core (6)
+  // ============================================================================
+  // CORE (20 exercises)
+  // ============================================================================
   { name: 'Plank', muscleGroup: 'core', equipmentType: 'bodyweight' },
   { name: 'Side Plank', muscleGroup: 'core', equipmentType: 'bodyweight' },
-  { name: 'Crunches', muscleGroup: 'core', equipmentType: 'bodyweight' },
-  { name: 'Russian Twists', muscleGroup: 'core', equipmentType: 'bodyweight' },
-  { name: 'Hanging Leg Raises', muscleGroup: 'core', equipmentType: 'bodyweight' },
-  { name: 'Cable Crunches', muscleGroup: 'core', equipmentType: 'cable' },
+  { name: 'Dead Bug', muscleGroup: 'core', equipmentType: 'bodyweight' },
+  { name: 'Bird Dog', muscleGroup: 'core', equipmentType: 'bodyweight' },
+  { name: 'Crunch', muscleGroup: 'core', equipmentType: 'bodyweight' },
+  { name: 'Decline Crunch', muscleGroup: 'core', equipmentType: 'bodyweight' },
+  { name: 'Cable Crunch', muscleGroup: 'core', equipmentType: 'cable' },
+  { name: 'Machine Crunch', muscleGroup: 'core', equipmentType: 'machine' },
+  { name: 'Oblique Crunch', muscleGroup: 'core', equipmentType: 'bodyweight' },
+  { name: 'Russian Twist', muscleGroup: 'core', equipmentType: 'bodyweight' },
+  { name: 'Hanging Leg Raise', muscleGroup: 'core', equipmentType: 'bodyweight' },
+  { name: 'Hanging Knee Raise', muscleGroup: 'core', equipmentType: 'bodyweight' },
+  { name: 'Lying Leg Raise', muscleGroup: 'core', equipmentType: 'bodyweight' },
+  { name: 'Lying Windshield Wiper', muscleGroup: 'core', equipmentType: 'bodyweight' },
+  { name: 'Ab Wheel Rollout', muscleGroup: 'core', equipmentType: 'other' },
+  { name: 'Cable Wood Chop', muscleGroup: 'core', equipmentType: 'cable' },
+  { name: 'Pallof Press', muscleGroup: 'core', equipmentType: 'cable' },
+  { name: 'Jefferson Curl', muscleGroup: 'core', equipmentType: 'barbell' },
+  { name: 'L-Sit', muscleGroup: 'core', equipmentType: 'bodyweight' },
+  { name: 'Hollow Body Hold', muscleGroup: 'core', equipmentType: 'bodyweight' },
 ];
 
 /**
@@ -151,7 +273,7 @@ export async function seedMockData(): Promise<MockDataResult> {
   const latPulldown = exercises.find((e) => e.name === 'Lat Pulldown');
   const legPress = exercises.find((e) => e.name === 'Leg Press');
   const dumbbellCurl = exercises.find((e) => e.name === 'Dumbbell Curl');
-  const tricepPushdown = exercises.find((e) => e.name === 'Tricep Pushdown');
+  const tricepPushdown = exercises.find((e) => e.name === 'Tricep Pushdown (Bar)');
 
   if (!benchPress || !squat || !deadlift) {
     throw new Error('Required exercises not found. Please seed exercises first.');
