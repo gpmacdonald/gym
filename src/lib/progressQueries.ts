@@ -472,3 +472,49 @@ export async function getCardioIntensityData(
 
   return dataPoints;
 }
+
+export interface BodyWeightDataPoint {
+  date: Date;
+  weight: number; // in kg (stored unit)
+  entryId: string;
+}
+
+/**
+ * Get body weight data over a time range.
+ *
+ * @param startDate - Start of date range (inclusive)
+ * @param endDate - End of date range (inclusive)
+ */
+export async function getBodyWeightProgressData(
+  startDate: Date | null,
+  endDate: Date | null
+): Promise<BodyWeightDataPoint[]> {
+  // Get all body weight entries
+  const entries = await db.bodyWeightEntries.toArray();
+
+  if (entries.length === 0) {
+    return [];
+  }
+
+  // Apply date filters and build data points
+  const dataPoints: BodyWeightDataPoint[] = [];
+
+  for (const entry of entries) {
+    const entryDate = new Date(entry.date);
+
+    // Apply date filters
+    if (startDate && entryDate < startDate) continue;
+    if (endDate && entryDate > endDate) continue;
+
+    dataPoints.push({
+      date: entryDate,
+      weight: entry.weight,
+      entryId: entry.id,
+    });
+  }
+
+  // Sort by date ascending
+  dataPoints.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  return dataPoints;
+}

@@ -1,6 +1,8 @@
+export type WorkoutType = 'weights' | 'cardio' | 'bodyweight';
+
 interface WorkoutTypeSelectorProps {
-  value: 'weights' | 'cardio';
-  onChange: (type: 'weights' | 'cardio') => void;
+  value: WorkoutType;
+  onChange: (type: WorkoutType) => void;
 }
 
 export default function WorkoutTypeSelector({
@@ -12,7 +14,7 @@ export default function WorkoutTypeSelector({
       <button
         type="button"
         onClick={() => onChange('weights')}
-        className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors min-h-[44px] ${
+        className={`flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-colors min-h-[44px] ${
           value === 'weights'
             ? 'bg-white dark:bg-gray-700 shadow text-primary'
             : 'text-gray-500 dark:text-gray-400'
@@ -23,13 +25,24 @@ export default function WorkoutTypeSelector({
       <button
         type="button"
         onClick={() => onChange('cardio')}
-        className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors min-h-[44px] ${
+        className={`flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-colors min-h-[44px] ${
           value === 'cardio'
             ? 'bg-white dark:bg-gray-700 shadow text-primary'
             : 'text-gray-500 dark:text-gray-400'
         }`}
       >
         Cardio
+      </button>
+      <button
+        type="button"
+        onClick={() => onChange('bodyweight')}
+        className={`flex-1 py-1.5 px-3 rounded-md text-sm font-medium transition-colors min-h-[44px] ${
+          value === 'bodyweight'
+            ? 'bg-white dark:bg-gray-700 shadow text-purple-600'
+            : 'text-gray-500 dark:text-gray-400'
+        }`}
+      >
+        Scale
       </button>
     </div>
   );

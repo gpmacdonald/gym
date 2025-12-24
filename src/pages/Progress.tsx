@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useCallback, lazy, Suspense } from 'react';
-import { Dumbbell, Heart } from 'lucide-react';
+import { Dumbbell, Heart, Scale } from 'lucide-react';
 import { Header } from '../components/layout';
 import {
   TimeRangeTabs,
@@ -31,8 +31,11 @@ const CardioIntensityChart = lazy(
 const CardioSummaryStats = lazy(
   () => import('../components/progress/CardioSummaryStats')
 );
+const BodyWeightChart = lazy(
+  () => import('../components/progress/BodyWeightChart')
+);
 
-type ViewType = 'weights' | 'cardio';
+type ViewType = 'weights' | 'cardio' | 'bodyweight';
 type WeightsChartType = 'weight' | 'volume';
 type CardioChartType = 'distance' | 'duration' | 'pace' | 'intensity';
 
@@ -114,7 +117,7 @@ export default function Progress() {
           <button
             type="button"
             onClick={() => setView('weights')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md font-medium transition ${
+            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md font-medium transition text-sm ${
               view === 'weights'
                 ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
                 : 'text-gray-600 dark:text-gray-400'
@@ -126,7 +129,7 @@ export default function Progress() {
           <button
             type="button"
             onClick={() => setView('cardio')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md font-medium transition ${
+            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md font-medium transition text-sm ${
               view === 'cardio'
                 ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
                 : 'text-gray-600 dark:text-gray-400'
@@ -135,15 +138,28 @@ export default function Progress() {
             <Heart className="w-4 h-4" />
             Cardio
           </button>
+          <button
+            type="button"
+            onClick={() => setView('bodyweight')}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md font-medium transition text-sm ${
+              view === 'bodyweight'
+                ? 'bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-400 shadow-sm'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
+          >
+            <Scale className="w-4 h-4" />
+            Scale
+          </button>
         </div>
 
         {/* Selector based on view */}
-        {view === 'weights' ? (
+        {view === 'weights' && (
           <ExerciseDropdown
             value={selectedExercise}
             onChange={setSelectedExercise}
           />
-        ) : (
+        )}
+        {view === 'cardio' && (
           <CardioTypeDropdown value={cardioFilter} onChange={setCardioFilter} />
         )}
 
@@ -247,31 +263,39 @@ export default function Progress() {
                   endDate={endDate}
                 />
               )
-            ) : cardioChartType === 'distance' ? (
-              <CardioDistanceChart
-                key={`distance-${refreshKey}`}
-                cardioType={cardioType}
-                startDate={startDate}
-                endDate={endDate}
-              />
-            ) : cardioChartType === 'duration' ? (
-              <CardioDurationChart
-                key={`duration-${refreshKey}`}
-                cardioType={cardioType}
-                startDate={startDate}
-                endDate={endDate}
-              />
-            ) : cardioChartType === 'pace' ? (
-              <CardioPaceChart
-                key={`pace-${refreshKey}`}
-                cardioType={cardioType}
-                startDate={startDate}
-                endDate={endDate}
-              />
+            ) : view === 'cardio' ? (
+              cardioChartType === 'distance' ? (
+                <CardioDistanceChart
+                  key={`distance-${refreshKey}`}
+                  cardioType={cardioType}
+                  startDate={startDate}
+                  endDate={endDate}
+                />
+              ) : cardioChartType === 'duration' ? (
+                <CardioDurationChart
+                  key={`duration-${refreshKey}`}
+                  cardioType={cardioType}
+                  startDate={startDate}
+                  endDate={endDate}
+                />
+              ) : cardioChartType === 'pace' ? (
+                <CardioPaceChart
+                  key={`pace-${refreshKey}`}
+                  cardioType={cardioType}
+                  startDate={startDate}
+                  endDate={endDate}
+                />
+              ) : (
+                <CardioIntensityChart
+                  key={`intensity-${refreshKey}`}
+                  cardioType={cardioType}
+                  startDate={startDate}
+                  endDate={endDate}
+                />
+              )
             ) : (
-              <CardioIntensityChart
-                key={`intensity-${refreshKey}`}
-                cardioType={cardioType}
+              <BodyWeightChart
+                key={`bodyweight-${refreshKey}`}
                 startDate={startDate}
                 endDate={endDate}
               />

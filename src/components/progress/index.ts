@@ -27,3 +27,5 @@ export { default as CardioIntensityChart } from './CardioIntensityChart';
 export { default as StatsCard } from './StatsCard';
 
 export { default as CardioSummaryStats } from './CardioSummaryStats';
+
+export { default as BodyWeightChart } from './BodyWeightChart';

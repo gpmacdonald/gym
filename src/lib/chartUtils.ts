@@ -8,6 +8,7 @@ export const CHART_COLORS = {
   secondary: '#10B981', // emerald-500
   accent: '#F59E0B', // amber-500
   danger: '#EF4444', // red-500
+  purple: '#8B5CF6', // violet-500 (for body weight)
   muted: '#6B7280', // gray-500
   grid: '#E5E7EB', // gray-200
   gridDark: '#374151', // gray-700

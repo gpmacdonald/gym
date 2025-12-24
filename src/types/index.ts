@@ -79,6 +79,16 @@ export interface CardioSession {
   updatedAt: Date;
 }
 
+// Body weight entry for daily tracking
+export interface BodyWeightEntry {
+  id: string;
+  date: Date;
+  weight: number; // Always stored in kg
+  notes?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 // User settings
 export interface Settings {
   id: 'settings';
@@ -128,4 +138,12 @@ export type CreateCardioSessionInput = Omit<
 >;
 export type UpdateCardioSessionInput = Partial<
   Omit<CardioSession, 'id' | 'createdAt' | 'updatedAt'>
+>;
+
+export type CreateBodyWeightInput = Omit<
+  BodyWeightEntry,
+  'id' | 'createdAt' | 'updatedAt'
+>;
+export type UpdateBodyWeightInput = Partial<
+  Omit<BodyWeightEntry, 'id' | 'createdAt' | 'updatedAt'>
 >;

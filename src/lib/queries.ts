@@ -4,12 +4,14 @@ import type {
   Workout,
   WorkoutSet,
   CardioSession,
+  BodyWeightEntry,
   MuscleGroup,
   CardioType,
   CreateExerciseInput,
   CreateWorkoutInput,
   CreateWorkoutSetInput,
   CreateCardioSessionInput,
+  CreateBodyWeightInput,
 } from '../types';
 
 // Generate a unique ID with fallback for non-secure contexts (iOS Safari over HTTP)
@@ -282,4 +284,88 @@ export async function updateCardioSession(
 /** Delete a cardio session */
 export async function deleteCardioSession(id: string): Promise<void> {
   await db.cardioSessions.delete(id);
+}
+
+// ============================================================================
+// Body Weight Queries
+// ============================================================================
+
+/** Get all body weight entries, sorted by date (newest first) */
+export async function getAllBodyWeightEntries(): Promise<BodyWeightEntry[]> {
+  return db.bodyWeightEntries.orderBy('date').reverse().toArray();
+}
+
+/** Get body weight entry by ID */
+export async function getBodyWeightEntryById(
+  id: string
+): Promise<BodyWeightEntry | undefined> {
+  return db.bodyWeightEntries.get(id);
+}
+
+/** Get body weight entries by date range */
+export async function getBodyWeightEntriesByDateRange(
+  start: Date,
+  end: Date
+): Promise<BodyWeightEntry[]> {
+  return db.bodyWeightEntries
+    .where('date')
+    .between(start, end, true, true)
+    .reverse()
+    .toArray();
+}
+
+/** Get the most recent body weight entry */
+export async function getLatestBodyWeight(): Promise<BodyWeightEntry | undefined> {
+  return db.bodyWeightEntries.orderBy('date').reverse().first();
+}
+
+/** Get today's body weight entry (if exists) */
+export async function getTodaysBodyWeight(): Promise<BodyWeightEntry | undefined> {
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
+
+  const entries = await db.bodyWeightEntries
+    .where('date')
+    .between(startOfDay, endOfDay, true, true)
+    .toArray();
+
+  return entries[0];
+}
+
+/** Add a new body weight entry */
+export async function addBodyWeightEntry(
+  input: CreateBodyWeightInput
+): Promise<string> {
+  const id = generateId();
+  const now = new Date();
+  const entry: BodyWeightEntry = {
+    ...input,
+    id,
+    createdAt: now,
+    updatedAt: now,
+  };
+  await db.bodyWeightEntries.add(entry);
+  return id;
+}
+
+/** Update a body weight entry */
+export async function updateBodyWeightEntry(
+  id: string,
+  data: Partial<Omit<BodyWeightEntry, 'id' | 'createdAt'>>
+): Promise<void> {
+  const existing = await db.bodyWeightEntries.get(id);
+  if (!existing) {
+    throw new Error(`BodyWeightEntry with id ${id} not found`);
+  }
+  await db.bodyWeightEntries.update(id, {
+    ...data,
+    updatedAt: new Date(),
+  });
+}
+
+/** Delete a body weight entry */
+export async function deleteBodyWeightEntry(id: string): Promise<void> {
+  await db.bodyWeightEntries.delete(id);
 }

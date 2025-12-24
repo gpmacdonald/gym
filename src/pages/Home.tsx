@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { Plus, Dumbbell, Heart } from 'lucide-react';
+import { Plus, Dumbbell, Heart, Scale } from 'lucide-react';
 import { Header } from '../components/layout';
 import {
   WorkoutTypeSelector,
   WorkoutLogger,
   ActivityList,
+  type WorkoutType,
 } from '../components/workout';
 import { CardioLogger } from '../components/cardio';
-
-type WorkoutType = 'weights' | 'cardio';
+import { BodyWeightLogger } from '../components/bodyweight';
 
 export default function Home() {
   const [isWorkoutActive, setIsWorkoutActive] = useState(false);
@@ -48,21 +48,41 @@ export default function Home() {
       <div className="p-4">
         {/* Success Message */}
         {showSuccess && (
-          <div className="mb-4 p-4 bg-success/10 border border-success/20 rounded-lg text-success flex items-center gap-2">
+          <div className={`mb-4 p-4 border rounded-lg flex items-center gap-2 ${
+            successType === 'bodyweight'
+              ? 'bg-purple-500/10 border-purple-500/20 text-purple-600 dark:text-purple-400'
+              : 'bg-success/10 border-success/20 text-success'
+          }`}>
             {successType === 'weights' ? (
               <Dumbbell className="w-5 h-5" />
-            ) : (
+            ) : successType === 'cardio' ? (
               <Heart className="w-5 h-5" />
+            ) : (
+              <Scale className="w-5 h-5" />
             )}
             <span>
-              {successType === 'weights' ? 'Workout' : 'Cardio session'} saved
-              successfully!
+              {successType === 'weights'
+                ? 'Workout'
+                : successType === 'cardio'
+                  ? 'Cardio session'
+                  : 'Weight entry'} saved successfully!
             </span>
           </div>
         )}
 
         {/* Workout Logger or Start Button */}
-        {isWorkoutActive ? (
+        {workoutType === 'bodyweight' ? (
+          // Body weight mode - always show logger directly
+          <>
+            <BodyWeightLogger
+              onComplete={() => {
+                setShowSuccess(true);
+                setSuccessType('bodyweight');
+                setTimeout(() => setShowSuccess(false), 3000);
+              }}
+            />
+          </>
+        ) : isWorkoutActive ? (
           workoutType === 'weights' ? (
             <WorkoutLogger
               onComplete={handleCompleteWorkout}

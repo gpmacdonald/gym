@@ -4,6 +4,7 @@ import type {
   Workout,
   WorkoutSet,
   CardioSession,
+  BodyWeightEntry,
   Settings,
 } from '../types';
 
@@ -12,6 +13,7 @@ export class FitnessDatabase extends Dexie {
   workouts!: Table<Workout>;
   workoutSets!: Table<WorkoutSet>;
   cardioSessions!: Table<CardioSession>;
+  bodyWeightEntries!: Table<BodyWeightEntry>;
   settings!: Table<Settings>;
 
   constructor() {
@@ -27,6 +29,16 @@ export class FitnessDatabase extends Dexie {
       // Primary key is 'id', indexes on 'date', 'type'
       cardioSessions: 'id, date, type',
       // Primary key is 'id' (always 'settings')
+      settings: 'id',
+    });
+
+    // Version 2: Add body weight tracking
+    this.version(2).stores({
+      exercises: 'id, name, muscleGroup, isCustom',
+      workouts: 'id, date',
+      workoutSets: 'id, workoutId, exerciseId, [workoutId+setNumber]',
+      cardioSessions: 'id, date, type',
+      bodyWeightEntries: 'id, date',
       settings: 'id',
     });
   }
